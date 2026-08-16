@@ -241,7 +241,7 @@ body.frozen #exWall{display:grid!important}
 </div></footer>
 
 <div id="journey" hidden>
-  <div class="totalchip">total <span class="num">€<span id="tot1">0</span></span></div>
+  <div class="totalchip">total <span class="num" id="tot1"></span></div>
   <div class="prog">
     <div class="pstep done"><i>✓</i>Fare</div><div class="pbar" id="pb1"><i></i></div>
     <div class="pstep" id="ps2"><i>2</i>Extras</div><div class="pbar" id="pb2"><i></i></div>
@@ -282,15 +282,15 @@ body.frozen #exWall{display:grid!important}
 
     <div class="paybox">
       <div class="payline"><span id="payFare"></span><span class="num" id="payFareAmt"></span></div>
-      <div class="payline" id="payBagLine" style="display:none"><span>Checked bag 23 kg</span><span class="num">€38</span></div>
-      <div class="payline" id="payOffLine" style="display:none"><span>Offer, ends <span class="num" id="offT2"></span></span><span class="num">−€15</span></div>
+      <div class="payline" id="payBagLine" style="display:none"><span>Checked bag 23 kg</span><span class="num" id="payBagAmt"></span></div>
+      <div class="payline" id="payOffLine" style="display:none"><span>Offer, ends <span class="num" id="offT2"></span></span><span class="num" id="payOffAmt"></span></div>
       <div class="payline"><span>Taxes &amp; fees</span><span>included</span></div>
       <div class="payline" id="payPolicy" style="display:none"><span>Change policy</span><span>€45 to T-2h</span></div>
-      <div class="payline total"><span>Total</span><span class="num">€<span id="tot2">0</span></span></div>
+      <div class="payline total"><span>Total</span><span class="num" id="tot2"></span></div>
       <p class="shield">Free cancellation for 24 hours.</p>
       <p class="shield">Price locked · <span class="num" id="lockT">10:00</span></p>
       <div class="payline" style="margin-top:10px"><span>Demo card on file</span><span class="num">•••• 4242</span></div>
-      <button class="paybtn" id="payBtn">Pay €<span id="tot3">0</span></button>
+      <button class="paybtn" id="payBtn">Pay <span class="num" id="tot3"></span></button>
     </div>
     <div class="stagenav"><button class="back" data-back="2">← traveller</button></div>
   </section>
@@ -364,6 +364,20 @@ const FARES=[
  {t:'18:40',a:'20:35',fam:'Light',pr:121,bag:0,chg:45,seat:0},
  {t:'18:40',a:'20:35',fam:'Flex', pr:166,bag:1,chg:0, seat:1},
 ];
+const LOC=(()=>{
+  const lang=navigator.language||'en';
+  const tz=Intl.DateTimeFormat().resolvedOptions().timeZone||'';
+  const sub=(lang.split('-')[1]||'').toUpperCase();
+  const R2C={AE:'AED',SA:'SAR',QA:'QAR',GB:'GBP',US:'USD',CH:'CHF',JP:'JPY'};
+  const T2C=[['Asia/Dubai','AED'],['Asia/Riyadh','SAR'],['Asia/Qatar','QAR'],['Europe/London','GBP'],
+             ['Europe/Zurich','CHF'],['Europe/Geneva','CHF'],['Asia/Tokyo','JPY'],['America/','USD']];
+  let cur=R2C[sub];
+  if(!cur){const hit=T2C.find(([k])=>tz.startsWith(k));cur=hit?hit[1]:'EUR';}
+  const RATES={EUR:1,AED:4.0,SAR:4.1,QAR:3.97,GBP:0.85,USD:1.09,CHF:0.95,JPY:163};
+  const nf=new Intl.NumberFormat(lang,{style:'currency',currency:cur,maximumFractionDigits:0});
+  return{lang,tz,cur,rate:RATES[cur]??1,nf};
+})();
+const fmt=e=>LOC.nf.format(Math.round(e*LOC.rate));
 const name=i=>`${FARES[i].t} ${FARES[i].fam}`;
 
 const CHEAPEST=FARES.reduce((b,f,i)=>f.pr<FARES[b].pr?i:b,0);
@@ -375,8 +389,8 @@ $('#list').innerHTML=FARES.map((f,i)=>`
     <span class="fam ${f.fam==='Flex'?'flex':''}">${f.fam}</span>
     <span class="bds">${i===CHEAPEST?'<i class="bd best">Cheapest</i>':''}${
       f.bag?'<i class="bd">23 kg bag</i><i class="bd">Free changes</i><i class="bd">Seats</i>'
-           :'<i class="bd">Cabin bag</i><i class="bd">Changes €45</i>'}</span>
-    <span class="price num">€${f.pr}</span>
+           :`<i class="bd">Cabin bag</i><i class="bd">Changes ${fmt(45)}</i>`}</span>
+    <span class="price num">${fmt(f.pr)}</span>
     <button class="sel" data-i="${i}">Select</button>
   </div>
   <div class="detail"><div><p>${f.bag?'Free changes to T-2h · any seat':'Seat assigned at check-in'} · on-time 92%</p></div></div>
@@ -475,8 +489,8 @@ function showCompare(i,j){
   const cheap=A.pr<=B.pr?i:j;
   const d=Math.abs(A.pr-B.pr);
   const txt=(A.bag===B.bag&&A.chg===B.chg)
-    ? `Same fare conditions. The ${FARES[cheap].t} ${FARES[cheap].fam} is €${d} less.`
-    : `Flex adds a checked bag, free changes and seat choice for €${d} more.`;
+    ? `Same fare conditions. The ${FARES[cheap].t} ${FARES[cheap].fam} is ${fmt(d)} less.`
+    : `Flex adds a checked bag, free changes and seat choice for ${fmt(d)} more.`;
   $('#cmpTxt').textContent=txt;
   cards[j].after($('#cmp'));
   $('#cmp').classList.add('on');
@@ -528,7 +542,7 @@ function renderBars(){
   const idx=[...FARES.keys()].sort((a,b)=>score(b)-score(a)).slice(0,4);
   const mx=Math.max(0.001,score(idx[0]));
   $('#bars').innerHTML=idx.map(i=>
-   `<div class="brow"><span>${name(i)} €${FARES[i].pr}</span>
+   `<div class="brow"><span>${name(i)} ${fmt(FARES[i].pr)}</span>
      <div class="btrack"><div class="bfill" style="width:${Math.max(0,score(i)/mx*100).toFixed(0)}%"></div></div></div>`).join('');
 }
 
@@ -647,10 +661,10 @@ renderBars();
   const[iata,city,routes]=o;
   $('#nearCity').textContent=`From ${city}`;
   $('#nearRoutes').innerHTML=routes.map(([to,pr])=>
-    `<button class="nr num" data-to="${to}">${iata} → ${to} <b>€${pr}</b></button>`).join(' ');
+    `<button class="nr num" data-to="${to}">${iata} → ${to} <b>${fmt(pr)}</b></button>`).join(' ');
   $$('#near .nr').forEach(b=>b.addEventListener('click',()=>
     feed(`route suggestion clicked · ${iata} → ${b.dataset.to}`)));
-  feed(`timezone ${tz||'unknown'} · origin ${iata} inferred · ${routes.length} nearby routes shown`);
+  feed(`timezone ${tz||'unknown'} · origin ${iata} · currency ${LOC.cur} demo rate · ${routes.length} routes shown`);
 })();
 
 /* ================= the purchase journey ================= */
@@ -682,8 +696,8 @@ function buildExtras(){
   let html;
   if(J.baggageGap){
     html=`<div class="offer"><b>Checked bag</b>
-      <small>23 kg checked bag, €38. Flex includes it, with free changes and seat choice, for €${diff} more.</small>
-      <div class="orow"><button class="obtn" id="addBag">Add bag €38</button>
+      <small>23 kg checked bag, ${fmt(38)}. Flex includes it, with free changes and seat choice, for ${fmt(diff)} more.</small>
+      <div class="orow"><button class="obtn" id="addBag">Add bag ${fmt(38)}</button>
       <button class="obtn ghost" id="skipBag">No bag</button></div></div>`;
     feed('extras · compare history matched · single bag offer shown');
   }else if(!J.light){
@@ -700,7 +714,7 @@ function buildExtras(){
   $('#exAdaptive').innerHTML=html;
   const ab=$('#addBag');
   if(ab)ab.addEventListener('click',()=>{J.added=true;updateTotal();
-    feed(`bag added · total €${calcTotal()}`);goStage(2);});
+    feed(`bag added · total ${fmt(calcTotal())}`);goStage(2);});
   const sb=$('#skipBag');if(sb)sb.addEventListener('click',()=>goStage(2));
 }
 
@@ -710,10 +724,10 @@ function setTotal(v){
   const from=J.totalShown===undefined?v:J.totalShown;
   J.total=v;J.totalShown=v;
   ['tot1','tot2','tot3'].forEach(id=>{const el=$('#'+id);if(!el)return;
-    if(RM||from===v){el.textContent=v;return;}
+    if(RM||from===v){el.textContent=fmt(v);return;}
     const t0=performance.now();
     (function tw(){const p=Math.min(1,(performance.now()-t0)/450);
-      el.textContent=Math.round(from+(v-from)*p);if(p<1)setTimeout(tw,30);})();});
+      el.textContent=fmt(from+(v-from)*p);if(p<1)setTimeout(tw,30);})();});
 }
 
 function goStage(n){
@@ -731,8 +745,10 @@ function goStage(n){
 
 function armPay(){
   $('#payFare').textContent=`Fare · ${name(J.fare)} GVA→LIS`;
-  $('#payFareAmt').textContent='€'+FARES[J.fare].pr;
+  $('#payFareAmt').textContent=fmt(FARES[J.fare].pr);
   $('#payBagLine').style.display=J.added?'':'none';
+  $('#payBagAmt').textContent=fmt(38);
+  $('#payOffAmt').textContent='−'+fmt(15);
   $('#payPolicy').style.display=(J.detailReader&&J.light)?'':'none';
   if(J.detailReader&&J.light)feed('payment · change policy row shown (fine-print history)');
   updateTotal();
@@ -820,23 +836,23 @@ function fireOffer(){
   tag.className='offtag';tag.id='offtag';
   cards[t].appendChild(tag);
   cards[t].querySelector('.price').innerHTML=
-    `<span class="oldp num">€${FARES[t].pr}</span><span class="newp num">€${FARES[t].pr-disc.amount}</span>`;
+    `<span class="oldp num">${fmt(FARES[t].pr)}</span><span class="newp num">${fmt(FARES[t].pr-disc.amount)}</span>`;
   updateTotal();
   if(J&&$('#st3').classList.contains('on'))
     $('#payOffLine').style.display=J.fare===t?'':'none';
   offInt=setInterval(offTick,1000);offTick();
-  feed(`€15 off ${name(t)} · most viewed fare · expires 5:00`);
+  feed(`${fmt(15)} off ${name(t)} · most viewed fare · expires 5:00`);
 }
 function offTick(){
   if(J&&J.paid){clearInterval(offInt);return;}
   const s=Math.max(0,Math.round((disc.ends-Date.now())/1000));
   const t=`${Math.floor(s/60)}:${String(s%60).padStart(2,'0')}`;
-  const tag=$('#offtag');if(tag)tag.textContent=`−€15 · ${t}`;
+  const tag=$('#offtag');if(tag)tag.textContent=`−${fmt(15)} · ${t}`;
   const t2=$('#offT2');if(t2)t2.textContent=t;
   if(s<=0){
     clearInterval(offInt);disc.active=false;
     if(tag)tag.remove();
-    cards[disc.fareIdx].querySelector('.price').textContent=`€${FARES[disc.fareIdx].pr}`;
+    cards[disc.fareIdx].querySelector('.price').textContent=fmt(FARES[disc.fareIdx].pr);
     $('#payOffLine').style.display='none';
     updateTotal();
     feed(`offer expired · ${name(disc.fareIdx)} price restored`);
