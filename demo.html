@@ -95,6 +95,15 @@ body.frozen .tag{display:none!important}
 footer{border-top:1px solid var(--line);padding:24px 28px 60px;color:var(--dim);font-size:12.5px}
 footer .max{max-width:880px;margin:0 auto}
 
+/* ---------- near-you routes ---------- */
+#near{max-width:880px;margin:0 auto;padding:2px 24px 0;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.nearlbl{font:11px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--dim)}
+.nr{border:1px solid var(--line);background:var(--card);border-radius:20px;padding:6px 13px;
+  font-size:12.5px;color:var(--ink);transition:border-color .3s}
+.nr:hover{border-color:var(--acc)}
+.nr b{color:var(--acc);font-weight:600}
+body.journey #near,body.frozen #near{display:none}
+
 /* ---------- smart offer, on the card ---------- */
 .offtag{position:absolute;top:-10px;left:14px;background:var(--gold);color:#101b17;border-radius:6px;
   padding:2.5px 9px;font:600 10.5px var(--mono);letter-spacing:.02em;box-shadow:0 2px 10px #c19a3f40;
@@ -222,6 +231,7 @@ body.frozen #exWall{display:grid!important}
 <div class="head">
   <h1>Four departures on Thursday.</h1>
 </div>
+<div id="near"><span class="nearlbl" id="nearCity"></span><span id="nearRoutes"></span></div>
 
 <div id="list"></div>
 <div id="cmp"><div><div class="inner" id="cmpTxt"></div></div></div>
@@ -611,6 +621,37 @@ $$('[data-sim]').forEach(b=>b.addEventListener('click',async()=>{
     $$('[data-sim]').forEach(x=>x.disabled=false);simRunning=false;}
 }));
 renderBars();
+
+/* ================= near-you routes ================= */
+/* Origin inferred from the IANA timezone: no permission, no network, on-device. */
+(function(){
+  const TZ={
+    'Asia/Dubai':['DXB','Dubai',[['ATH',219],['LIS',309],['HND',489]]],
+    'Asia/Riyadh':['RUH','Riyadh',[['ATH',199],['LIS',329],['JFK',549]]],
+    'Asia/Qatar':['DOH','Doha',[['ATH',209],['LIS',319],['JFK',529]]],
+    'Europe/Zurich':['ZRH','Zurich',[['LIS',119],['ATH',129],['JFK',299]]],
+    'Europe/London':['LHR','London',[['LIS',79],['ATH',119],['JFK',249]]],
+    'Europe/Paris':['CDG','Paris',[['LIS',89],['ATH',125],['JFK',269]]],
+    'Europe/Lisbon':['LIS','Lisbon',[['GVA',89],['ATH',139],['DXB',309]]],
+    'America/New_York':['JFK','New York',[['LIS',278],['ATH',329],['GVA',299]]],
+    'America/Los_Angeles':['LAX','Los Angeles',[['HND',429],['JFK',179],['LIS',389]]],
+  };
+  const tz=Intl.DateTimeFormat().resolvedOptions().timeZone||'';
+  let o=TZ[tz];
+  if(!o){
+    if(tz.startsWith('Europe/'))o=['GVA','Geneva',[['LIS',89],['ATH',102],['JFK',278]]];
+    else if(tz.startsWith('America/'))o=TZ['America/New_York'];
+    else if(tz.startsWith('Asia/'))o=TZ['Asia/Dubai'];
+    else o=['GVA','Geneva',[['LIS',89],['ATH',102],['JFK',278]]];
+  }
+  const[iata,city,routes]=o;
+  $('#nearCity').textContent=`From ${city}`;
+  $('#nearRoutes').innerHTML=routes.map(([to,pr])=>
+    `<button class="nr num" data-to="${to}">${iata} → ${to} <b>€${pr}</b></button>`).join(' ');
+  $$('#near .nr').forEach(b=>b.addEventListener('click',()=>
+    feed(`route suggestion clicked · ${iata} → ${b.dataset.to}`)));
+  feed(`timezone ${tz||'unknown'} · origin ${iata} inferred · ${routes.length} nearby routes shown`);
+})();
 
 /* ================= the purchase journey ================= */
 /* What was learned on the results page decides what the journey does NOT ask. */
