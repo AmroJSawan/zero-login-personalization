@@ -8,250 +8,178 @@
 :root{
   --paper:#f4f4ef; --card:#fbfbf8; --ink:#101b17; --dim:#5c6b64; --faint:#95a29b;
   --line:#dcdfd8; --acc:#0f5f4c; --acc-soft:#0f5f4c14; --gold:#c19a3f;
-  --wash:linear-gradient(160deg,#0f5f4c10,#c19a3f0a);
   --sans:"Avenir Next",Avenir,Futura,"Century Gothic","Segoe UI",system-ui,sans-serif;
   --mono:ui-monospace,"SF Mono",Menlo,monospace;
 }
-body[data-mode="disruption"]{--acc:#b2541a;--acc-soft:#b2541a16;--wash:linear-gradient(160deg,#b2541a14,#c19a3f0a)}
-body[data-mode="business"]  {--acc:#24425c;--acc-soft:#24425c14;--wash:linear-gradient(160deg,#24425c12,#5c6b6408)}
-body[data-mode="leisure"]   {--acc:#0b7d8a;--acc-soft:#0b7d8a14;--wash:linear-gradient(160deg,#0b7d8a14,#c19a3f10)}
-body[data-mode="family"]    {--acc:#b0486b;--acc-soft:#b0486b14;--wash:linear-gradient(160deg,#b0486b12,#c19a3f0a)}
-
 *{box-sizing:border-box}
-body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.55 var(--sans);
-  transition:background .6s}
+body{margin:0;background:var(--paper);color:var(--ink);font:15.5px/1.5 var(--sans)}
 @media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
-a{color:var(--acc)}
 button{font:inherit;cursor:pointer}
+.num{font-variant-numeric:tabular-nums}
 
-/* ---------- topbar ---------- */
-.top{display:flex;align-items:center;gap:26px;padding:18px 28px;border-bottom:1px solid var(--line)}
-.mark{font-weight:600;letter-spacing:.34em;font-size:15px}
+/* ---------- chrome ---------- */
+.top{display:flex;align-items:center;gap:26px;padding:16px 28px;border-bottom:1px solid var(--line)}
+.mark{font-weight:600;letter-spacing:.34em;font-size:14px}
 .mark s{color:var(--gold);text-decoration:none}
-.top nav{display:flex;gap:18px;font-size:13.5px;color:var(--dim)}
-.top nav a{color:var(--dim);text-decoration:none}
-.top nav a:hover{color:var(--ink)}
+.route{font:13px var(--mono);color:var(--dim)}
+.route b{color:var(--ink);font-weight:600}
 .badge{margin-left:auto;font:11px var(--mono);color:var(--dim);border:1px solid var(--line);
   border-radius:20px;padding:5px 11px;background:var(--card)}
 .badge i{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--acc);
   margin-right:6px;vertical-align:1px}
 
-/* ---------- hero (adaptive slot A, fixed geometry) ---------- */
-#hero{min-height:400px;display:flex;align-items:center;background:var(--wash);
-  border-bottom:1px solid var(--line);transition:background .6s}
-#heroInner{max-width:980px;margin:0 auto;padding:44px 28px;width:100%;opacity:1;transition:opacity .22s}
-#heroInner.fade{opacity:0}
-.kicker{font:12px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--acc);margin:0 0 12px}
-h1{font-size:clamp(30px,4.6vw,46px);line-height:1.08;letter-spacing:-.015em;margin:0 0 10px;
-  font-weight:600;text-wrap:balance;max-width:17ch}
-.sub{color:var(--dim);margin:0 0 26px;max-width:52ch}
-.search{display:flex;gap:10px;max-width:620px}
-.search input{flex:1;font:16px var(--sans);padding:15px 18px;border:1.5px solid var(--line);
-  border-radius:12px;background:var(--card);color:var(--ink);outline:none}
-.search input:focus{border-color:var(--acc)}
-.search button{background:var(--acc);color:#fff;border:0;border-radius:12px;padding:0 26px;font-weight:600}
-.why{margin-top:20px;font-size:12.5px;color:var(--dim)}
-.why button{background:none;border:0;color:var(--acc);text-decoration:underline;padding:0;font-size:12.5px}
+.head{max-width:880px;margin:0 auto;padding:30px 24px 6px}
+.head h1{font-size:24px;letter-spacing:-.01em;margin:0 0 3px;font-weight:600}
+.head p{color:var(--dim);font-size:13.5px;margin:0}
 
-/* hero variant furniture */
-.hrow{display:flex;gap:12px;flex-wrap:wrap;margin:4px 0 0}
-.hcard{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 18px;min-width:190px}
-.hcard b{display:block;margin-bottom:2px}
-.hcard small{color:var(--dim)}
-.hcard.act{border-color:var(--acc);box-shadow:0 1px 0 var(--acc)}
-.hbtn{display:inline-block;background:var(--acc);color:#fff;border:0;border-radius:10px;
-  padding:10px 16px;font-weight:600;font-size:14px;margin-top:8px}
-.hbtn.ghost{background:none;color:var(--acc);border:1.5px solid var(--acc)}
-.status{font:13px var(--mono);color:var(--dim)}
-.status b{color:var(--acc);font-weight:600}
-.num{font-variant-numeric:tabular-nums}
+/* ---------- fare rows ---------- */
+#list{max-width:880px;margin:0 auto;padding:18px 24px 8px;display:flex;flex-direction:column;gap:10px}
+.fare{position:relative;background:var(--card);border:1.5px solid var(--line);border-radius:14px;
+  padding:15px 18px 13px;
+  transition:opacity .6s,border-color .55s,box-shadow .55s,background .55s,filter .6s}
+.fare .row{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.tblock{min-width:150px}
+.tblock .tt{font-weight:600;font-size:17px;letter-spacing:.01em}
+.tblock small{color:var(--dim);font:11.5px var(--mono)}
+.fam{font:11px var(--mono);letter-spacing:.08em;text-transform:uppercase;border:1px solid var(--line);
+  border-radius:14px;padding:3px 10px;color:var(--dim)}
+.fam.flex{border-color:var(--gold);color:#8a6d29}
+.meta{color:var(--dim);font-size:12.5px;flex:1;min-width:140px}
+.price{font-weight:600;font-size:17px;transition:font-size .5s,color .5s;min-width:64px;text-align:right}
+.sel{border:1.5px solid var(--acc);background:none;color:var(--acc);border-radius:10px;
+  padding:9px 18px;font-weight:600;font-size:13.5px;transition:background .3s,color .3s}
+.sel:hover{background:var(--acc);color:#fff}
+.detail{display:grid;grid-template-rows:0fr;transition:grid-template-rows .45s ease}
+.detail>div{overflow:hidden}
+.detail p{margin:10px 0 2px;padding-top:10px;border-top:1px dashed var(--line);
+  color:var(--dim);font-size:12.5px}
+.reassure{display:grid;grid-template-rows:0fr;transition:grid-template-rows .5s ease .05s}
+.reassure>div{overflow:hidden}
+.reassure p{margin:8px 0 0;font-size:12px;color:var(--acc)}
+/* salience states — each individually near-subliminal */
+.fare.hi{border-color:var(--acc);background:#fff;box-shadow:0 3px 16px #0f5f4c12}
+.fare.hi .price{font-size:19px;color:var(--acc)}
+.fare.open .detail{grid-template-rows:1fr}
+.fare.assure .reassure{grid-template-rows:1fr}
+.fare.lo{opacity:.8;filter:saturate(.7)}
+.fare.pulse{animation:breathe 1.5s ease 2}
+@keyframes breathe{0%,100%{box-shadow:0 0 0 0 #c19a3f00}45%{box-shadow:0 0 0 5px #c19a3f3d}}
+/* comparison chip */
+#cmp{max-width:880px;margin:0 auto;padding:0 24px;display:grid;grid-template-rows:0fr;
+  transition:grid-template-rows .5s ease}
+#cmp.on{grid-template-rows:1fr}
+#cmp>div{overflow:hidden}
+#cmp .inner{border:1.5px solid var(--gold);background:#c19a3f10;border-radius:12px;
+  padding:11px 16px;font-size:13px;margin:2px 0 10px}
+#cmp .inner b{color:#8a6d29}
+/* reveal layer */
+.tag{position:absolute;top:-9px;right:12px;font:10px var(--mono);background:#101b17;color:#5fd0a5;
+  border-radius:5px;padding:2px 7px;display:none;letter-spacing:.03em}
+body.reveal .tag{display:block}
+body.frozen .fare{opacity:1!important;filter:none!important;border-color:var(--line)!important;
+  background:var(--card)!important;box-shadow:none!important}
+body.frozen .fare .price{font-size:17px!important;color:var(--ink)!important}
+body.frozen .detail,body.frozen .reassure{grid-template-rows:0fr!important}
+body.frozen #cmp{grid-template-rows:0fr!important}
+body.frozen .tag{display:none!important}
 
-/* ---------- chips ---------- */
-.chips{display:flex;gap:10px;flex-wrap:wrap;max-width:980px;margin:0 auto;padding:20px 28px}
-.chip{border:1.5px solid var(--line);background:var(--card);border-radius:24px;padding:9px 17px;
-  font-size:13.5px;color:var(--ink);transition:opacity .5s,border-color .3s,box-shadow .3s}
-.chip.hot{border-color:var(--acc);box-shadow:0 0 0 3px var(--acc-soft);font-weight:600}
-.chip.dimmed{opacity:.38}
+.about{max-width:880px;margin:0 auto;padding:26px 24px 40px;color:var(--dim);font-size:13px;max-width:72ch}
+.about h2{font-size:15px;color:var(--ink);margin:18px 0 4px}
+footer{border-top:1px solid var(--line);padding:24px 28px 60px;color:var(--dim);font-size:12.5px}
+footer .max{max-width:880px;margin:0 auto}
 
-/* ---------- sections ---------- */
-section.band{max-width:980px;margin:0 auto;padding:38px 28px}
-.band h2{font-size:21px;letter-spacing:-.01em;margin:0 0 4px}
-.band .lede{color:var(--dim);font-size:14px;margin:0 0 22px}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px}
-.dest{border-radius:16px;padding:16px 14px 13px;color:#fff;min-height:150px;display:flex;
-  flex-direction:column;justify-content:flex-end;cursor:pointer;border:0;text-align:left;
-  transition:transform .18s;position:relative;overflow:hidden}
-.dest:hover{transform:translateY(-2px)}
-.dest .iata{font:600 26px/1 var(--sans);letter-spacing:.04em}
-.dest .city{font-size:12.5px;opacity:.92}
-.dest .pr{font:12px var(--mono);margin-top:5px;opacity:.95}
-.g-dps{background:linear-gradient(165deg,#0b7d8a,#c19a3f)}
-.g-mle{background:linear-gradient(165deg,#0a8f9e,#065361)}
-.g-lis{background:linear-gradient(165deg,#4e8fc7,#e0a06a)}
-.g-hnd{background:linear-gradient(165deg,#3c3f74,#c96a8d)}
-.g-jfk{background:linear-gradient(165deg,#54616c,#c19a3f)}
-.g-ath{background:linear-gradient(165deg,#2668a8,#8fc1e3)}
-.shuttle{display:flex;justify-content:space-between;align-items:center;gap:14px;padding:14px 4px;
-  border-bottom:1px solid var(--line)}
-.shuttle:last-child{border-bottom:0}
-.shuttle .rt{font-weight:600}
-.shuttle .times{font:13px var(--mono);color:var(--dim)}
-.shuttle button{border:1.5px solid var(--acc);background:none;color:var(--acc);border-radius:9px;
-  padding:7px 14px;font-size:13px;font-weight:600}
-.fam{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
-.fam .hcard{min-width:0}
-details{border:1px solid var(--line);border-radius:12px;padding:14px 18px;margin-top:16px;background:var(--card)}
-summary{cursor:pointer;font-weight:600;font-size:14px}
-details table{width:100%;border-collapse:collapse;font-size:13px;margin-top:10px}
-details td,details th{text-align:left;padding:7px 8px;border-bottom:1px solid var(--line)}
-details th{color:var(--dim);font-size:11px;text-transform:uppercase;letter-spacing:.06em}
-
-/* rail: adaptive slot B, geometry reserved */
-#rail{max-width:980px;margin:0 auto;padding:8px 28px 34px;min-height:132px}
-#rail .ph{border:1.5px dashed var(--line);border-radius:14px;min-height:96px;display:flex;
-  align-items:center;justify-content:center;color:var(--faint);font-size:13px}
-#rail .hrow{margin:0}
-
-footer{border-top:1px solid var(--line);padding:26px 28px 60px;color:var(--dim);font-size:12.5px}
-footer .max{max-width:980px;margin:0 auto}
-
-/* ---------- pill + brain drawer ---------- */
+/* ---------- pill + drawer ---------- */
 #pill{position:fixed;right:20px;bottom:20px;z-index:60;display:flex;align-items:center;gap:9px;
   background:#101b17;color:#e8ede9;border:1px solid #2d3b34;border-radius:26px;padding:11px 17px;
   font:12.5px var(--mono);box-shadow:0 8px 28px #0004}
-#pill i{width:9px;height:9px;border-radius:50%;background:#95a29b;animation:pulse 2.2s infinite}
-#pill.hunch i{background:#c19a3f}#pill.adapting i{background:#5fd0a5;animation:none}
-@keyframes pulse{0%,100%{opacity:.4}50%{opacity:1}}
-#brain{position:fixed;right:20px;bottom:74px;z-index:59;width:min(360px,calc(100vw - 40px));
+#pill i{width:9px;height:9px;border-radius:50%;background:#95a29b;animation:pulseDot 2.2s infinite}
+#pill.live i{background:#5fd0a5;animation:none}
+@keyframes pulseDot{0%,100%{opacity:.4}50%{opacity:1}}
+#brain{position:fixed;right:20px;bottom:74px;z-index:59;width:min(370px,calc(100vw - 40px));
   background:#101b17;color:#cfd8d2;border:1px solid #2d3b34;border-radius:16px;padding:18px;
-  font-size:13px;display:none;box-shadow:0 16px 48px #0006;max-height:min(72vh,640px);overflow:auto}
+  font-size:13px;display:none;box-shadow:0 16px 48px #0006;max-height:min(74vh,660px);overflow:auto}
 #brain.open{display:block}
-#brain h3{margin:0 0 3px;font-size:13px;color:#e8ede9;letter-spacing:.02em}
+#brain h3{margin:0 0 3px;font-size:13px;color:#e8ede9}
 #brain .note{font-size:11px;color:#7f8d86;line-height:1.5}
-.bars{margin:13px 0}
-.brow{display:flex;align-items:center;gap:9px;margin:7px 0;font:11px var(--mono)}
-.brow span{width:74px;color:#9fada6}
+.bars{margin:12px 0 4px}
+.brow{display:flex;align-items:center;gap:9px;margin:6px 0;font:10.5px var(--mono)}
+.brow span{width:104px;color:#9fada6;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .btrack{flex:1;height:7px;background:#1d2a24;border-radius:4px;overflow:hidden}
-.bfill{height:100%;width:0%;border-radius:4px;transition:width .5s}
-.b-disruption{background:#d97a3d}.b-business{background:#6f96b8}.b-leisure{background:#3fb3c2}.b-family{background:#d3719a}
-.brow b{width:36px;text-align:right;color:#e8ede9}
-#conf{font:11px var(--mono);color:#9fada6;margin:4px 0 12px}
+.bfill{height:100%;width:0%;background:#3fb3c2;border-radius:4px;transition:width .6s}
 #feed{list-style:none;margin:8px 0;padding:0;font:11px var(--mono);color:#9fada6}
 #feed li{padding:3px 0;border-bottom:1px solid #1c2822}
 #feed li b{color:#e8ede9;font-weight:500}
+.tgl{display:flex;gap:7px;margin:10px 0 4px;flex-wrap:wrap}
+.tgl button,.simrow button,#resetB{background:#1d2a24;border:1px solid #2d3b34;color:#cfd8d2;
+  border-radius:9px;padding:7px 11px;font-size:11.5px}
+.tgl button.on{border-color:#5fd0a5;color:#5fd0a5}
 .simrow{display:flex;gap:7px;flex-wrap:wrap;margin:10px 0 4px}
-.simrow button,#resetB{background:#1d2a24;border:1px solid #2d3b34;color:#cfd8d2;border-radius:9px;
-  padding:7px 11px;font-size:11.5px}
-.simrow button:hover,#resetB:hover{border-color:#5fd0a5}
 .simrow button:disabled{opacity:.4;cursor:default}
-#brain hr{border:0;border-top:1px solid #1c2822;margin:14px 0}
-
-/* ghost cursor */
+#brain hr{border:0;border-top:1px solid #1c2822;margin:13px 0}
 #ghost{position:fixed;z-index:70;width:22px;height:22px;border-radius:50%;pointer-events:none;
-  border:2.5px solid var(--gold);background:#c19a3f33;display:none;
-  transform:translate(-50%,-50%);transition:left .55s cubic-bezier(.3,.7,.3,1),top .55s cubic-bezier(.3,.7,.3,1)}
-#ghost.click{animation:tap .3s}
-@keyframes tap{50%{scale:.6}}
-.gaze{outline:2.5px solid var(--gold)!important;outline-offset:3px;border-radius:8px}
+  border:2.5px solid var(--gold);background:#c19a3f33;display:none;transform:translate(-50%,-50%)}
 :focus-visible{outline:2.5px solid var(--acc);outline-offset:2px}
 </style>
 </head>
-<body data-mode="default">
+<body>
 
 <div class="top">
   <div class="mark">MERIDIAN<s> ✳</s></div>
-  <nav aria-label="site"><a href="#book">Book</a><a href="#shuttles">Manage</a><a href="#deals">Deals</a><a href="#family">Family</a></nav>
+  <div class="route"><b>GVA → LIS</b> · Thu 21 May · 1 adult · direct</div>
   <div class="badge"><i></i>synthetic demo · on-device only</div>
 </div>
 
-<section id="hero" aria-live="polite"><div id="heroInner"></div></section>
-
-<div class="chips" id="chips" role="group" aria-label="quick actions">
-  <button class="chip" data-p="disruption" data-w="1.8" data-l="tapped Flight status">Flight status</button>
-  <button class="chip" data-p="disruption" data-w="1.8" data-l="tapped Rebook">Rebook a flight</button>
-  <button class="chip" data-p="business" data-w="1.6" data-l="tapped Business shuttle">Business shuttle</button>
-  <button class="chip" data-p="leisure" data-w="1.6" data-l="tapped Deals">Deals</button>
-  <button class="chip" data-p="family" data-w="1.6" data-l="tapped Family travel">Family travel</button>
-  <button class="chip" data-p="family" data-w="1.1" data-l="tapped Baggage">Baggage</button>
+<div class="head">
+  <h1>Four departures on Thursday.</h1>
+  <p>Nothing to type here on purpose. The page reads only your cursor — where it gravitates, what it returns to, where it hesitates — and adjusts in steps small enough to miss. Open the panel in the corner to catch it in the act.</p>
 </div>
 
-<section class="band" id="deals" data-dwell="leisure" data-dl="lingered on destinations">
-  <h2>Where next</h2>
-  <p class="lede">Direct fares for the next three months. Taxes in.</p>
-  <div class="grid">
-    <button class="dest g-lis" data-hov="leisure:0.5:looked at Lisbon"><span class="iata">LIS</span><span class="city">Lisbon</span><span class="pr num">from €89</span></button>
-    <button class="dest g-ath" data-hov="leisure:0.5:looked at Athens"><span class="iata">ATH</span><span class="city">Athens</span><span class="pr num">from €102</span></button>
-    <button class="dest g-jfk" data-hov="business:0.35:looked at New York"><span class="iata">JFK</span><span class="city">New York</span><span class="pr num">from €278</span></button>
-    <button class="dest g-dps" data-hov="leisure:0.6:lingered on Bali"><span class="iata">DPS</span><span class="city">Bali</span><span class="pr num">from €489</span></button>
-    <button class="dest g-hnd" data-hov="leisure:0.5:looked at Tokyo"><span class="iata">HND</span><span class="city">Tokyo</span><span class="pr num">from €534</span></button>
-    <button class="dest g-mle" data-hov="leisure:0.6:lingered on Maldives"><span class="iata">MLE</span><span class="city">Maldives</span><span class="pr num">from €612</span></button>
-  </div>
-</section>
+<div id="list"></div>
+<div id="cmp"><div><div class="inner" id="cmpTxt"></div></div></div>
 
-<section class="band" id="shuttles" data-dwell="business" data-dl="read the shuttle timetable">
-  <h2>The morning shuttles</h2>
-  <p class="lede">Hourly business routes. Wi-Fi, aisle held to T-15, receipt filed to your inbox.</p>
-  <div>
-    <div class="shuttle" data-hov="business:0.5:hovered GVA–LHR"><span class="rt">GVA → LHR</span><span class="times num">07:10 · 09:10 · 12:10 · 18:40</span><button data-p="business" data-w="1.6" data-l="one-tap GVA–LHR">Book 07:10</button></div>
-    <div class="shuttle" data-hov="business:0.5:hovered ZRH–FRA"><span class="rt">ZRH → FRA</span><span class="times num">06:55 · 08:55 · 17:25</span><button data-p="business" data-w="1.6" data-l="one-tap ZRH–FRA">Book 06:55</button></div>
-    <div class="shuttle" data-hov="business:0.5:hovered GVA–AMS"><span class="rt">GVA → AMS</span><span class="times num">07:30 · 12:30 · 19:05</span><button data-p="business" data-w="1.6" data-l="one-tap GVA–AMS">Book 07:30</button></div>
-  </div>
+<section class="about" id="about">
+  <h2>About these fares</h2>
+  <p>Light travels cabin-bag only and changes cost €45. Flex includes a 23&nbsp;kg checked bag, free
+  changes to two hours before departure, and seat selection. Both board the same A220; the fare is a
+  contract, not a different aircraft.</p>
+  <h2>About this page</h2>
+  <p>Every adjustment you may or may not have noticed — a fare quietly opening its details, another
+  receding, the difference between two fares getting pinned — was triggered by pointer behaviour
+  alone. Freeze the adaptation in the corner panel and compare how the page feels.</p>
 </section>
-
-<section class="band" id="family" data-dwell="family" data-dl="read the family section slowly">
-  <h2>Little wings</h2>
-  <p class="lede">Flying with kids, without the spreadsheet.</p>
-  <div class="fam">
-    <div class="hcard" data-hov="family:0.5:read seats-together"><b>Seats together, free</b><small>Guaranteed at booking for under-12s. No seat-map roulette.</small></div>
-    <div class="hcard" data-hov="family:0.5:read kids fares"><b>Under-12s fly 50% off</b><small>Infants on lap €15 flat, anywhere.</small></div>
-    <div class="hcard" data-hov="family:0.5:read stroller policy"><b>Stroller to the gate</b><small>Gate-checked, back at the jet bridge on arrival.</small></div>
-  </div>
-  <details data-open="family:0.9:opened the fare fine print">
-    <summary>Family fare rules, the actual fine print</summary>
-    <table>
-      <tr><th>Item</th><th>Allowance</th><th>Fee</th></tr>
-      <tr><td>Checked bag, adult</td><td class="num">23 kg</td><td class="num">included</td></tr>
-      <tr><td>Checked bag, child</td><td class="num">23 kg</td><td class="num">included</td></tr>
-      <tr><td>Stroller / car seat</td><td class="num">2 items</td><td class="num">€0</td></tr>
-      <tr><td>Name change</td><td>any time to T-2h</td><td class="num">€25</td></tr>
-      <tr><td>Date change</td><td>any time to T-2h</td><td class="num">fare difference only</td></tr>
-    </table>
-  </details>
-</section>
-
-<div id="rail" aria-live="polite"><div class="ph">More for you appears here as Meridian gets to know you.</div></div>
 
 <footer><div class="max">
-  <b>Meridian Airways</b> — a fully synthetic proof of concept. Every flight, fare, and person is fictional.
-  Nothing you do here is transmitted anywhere: the profile, the prediction, and the adaptation all run inside this tab
-  and evaporate when you close it. Open the panel in the corner to watch the machinery.
+  <b>Meridian Airways</b> — a fully synthetic proof of concept. Every flight, fare and price is fictional.
+  Nothing is transmitted anywhere: the observation, the inference and the adaptation run inside this tab
+  and evaporate when you close it.
 </div></footer>
 
-<button id="pill" aria-expanded="false" aria-controls="brain"><i></i><span id="pillText">getting to know you — quietly</span></button>
+<button id="pill" aria-expanded="false" aria-controls="brain"><i></i><span id="pillText">reading the room — quietly</span></button>
 
 <aside id="brain" role="region" aria-label="adaptation machinery">
-  <h3>What Meridian thinks, live</h3>
-  <p class="note">Belief over four intents, updated by your behaviour. It adapts nothing until the evidence clears a bar — restraint is a feature, not a failure.</p>
-  <div class="bars">
-    <div class="brow"><span>disruption</span><div class="btrack"><div class="bfill b-disruption" id="bar-disruption"></div></div><b id="pv-disruption">–</b></div>
-    <div class="brow"><span>business</span><div class="btrack"><div class="bfill b-business" id="bar-business"></div></div><b id="pv-business">–</b></div>
-    <div class="brow"><span>leisure</span><div class="btrack"><div class="bfill b-leisure" id="bar-leisure"></div></div><b id="pv-leisure">–</b></div>
-    <div class="brow"><span>family</span><div class="btrack"><div class="bfill b-family" id="bar-family"></div></div><b id="pv-family">–</b></div>
+  <h3>What the page noticed</h3>
+  <p class="note">Interest is accumulated per fare from cursor gravity, hovers, returns and retreats.
+  Adaptations are deliberately micrograded — use <b>reveal</b> to annotate them and <b>freeze</b> to
+  feel the page without them.</p>
+  <div class="tgl">
+    <button id="tglReveal">◉ reveal adaptations</button>
+    <button id="tglFreeze">❄ freeze (default page)</button>
   </div>
-  <div id="conf">confidence – · tier: observing</div>
+  <div class="bars" id="bars"></div>
   <ul id="feed"><li>watching, not judging</li></ul>
   <hr>
   <h3>Simulate a visitor</h3>
-  <p class="note">A ghost cursor plays a scripted anonymous visitor; the page reacts exactly as it would to a real one.</p>
+  <p class="note">The ghost dispatches real pointer events through the same pipeline — it is a replay,
+  not a shortcut.</p>
   <div class="simrow">
-    <button data-sim="disruption">✈ stressed traveller</button>
-    <button data-sim="business">💼 shuttle commuter</button>
-    <button data-sim="leisure">🏖 daydreamer</button>
-    <button data-sim="family">👪 family planner</button>
+    <button data-sim="comparer">⇄ the comparer</button>
+    <button data-sim="hesitator">… the hesitator</button>
+    <button data-sim="returner">↩ the returner</button>
+    <button data-sim="hunter">⌄ the hunter</button>
   </div>
   <button id="resetB">↺ reset session</button>
   <hr>
-  <p class="note">Try it yourself: type "my flight is delayed" in the search box, linger over the Maldives, or read the family fine print. Copying the fare table counts too.</p>
+  <p class="note">This demo reads a mouse or trackpad; on touch it stays politely default.</p>
 </aside>
 
 <div id="ghost" aria-hidden="true"></div>
@@ -260,277 +188,263 @@ footer .max{max-width:980px;margin:0 auto}
 'use strict';
 const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
 const RM=matchMedia('(prefers-reduced-motion: reduce)').matches;
-const PERSONAS=['disruption','business','leisure','family'];
-const NAMES={disruption:'a disrupted trip',business:'a business hop',leisure:'a getaway',family:'a family trip'};
 
-const S={sc:{disruption:0,business:0,leisure:0,family:0},n:0,feed:[],mode:'default',
-         tier:'observing',dismissed:{},credited:new Set(),reasons:{disruption:[],business:[],leisure:[],family:[]}};
+/* ---------------- data ---------------- */
+const FARES=[
+ {t:'06:00',a:'07:55',fam:'Light',pr:89, bag:0,chg:45,seat:0},
+ {t:'06:00',a:'07:55',fam:'Flex', pr:134,bag:1,chg:0, seat:1},
+ {t:'09:10',a:'11:05',fam:'Light',pr:112,bag:0,chg:45,seat:0},
+ {t:'09:10',a:'11:05',fam:'Flex', pr:153,bag:1,chg:0, seat:1},
+ {t:'14:20',a:'16:15',fam:'Light',pr:98, bag:0,chg:45,seat:0},
+ {t:'14:20',a:'16:15',fam:'Flex', pr:141,bag:1,chg:0, seat:1},
+ {t:'18:40',a:'20:35',fam:'Light',pr:121,bag:0,chg:45,seat:0},
+ {t:'18:40',a:'20:35',fam:'Flex', pr:166,bag:1,chg:0, seat:1},
+];
+const name=i=>`${FARES[i].t} ${FARES[i].fam}`;
 
-/* ---------------- belief engine ---------------- */
-function signal(p,w,label,quiet){
-  if(!PERSONAS.includes(p)||w<=0)return;
-  if(S.dismissed[p])w*=0.2;
-  S.sc[p]+=w;S.n++;
-  for(const q of PERSONAS)if(q!==p)S.sc[q]*=0.965;
-  S.reasons[p].push(label);if(S.reasons[p].length>3)S.reasons[p].shift();
-  S.feed.unshift({p,label});if(S.feed.length>9)S.feed.pop();
-  recompute(quiet);
-}
-function probs(){
-  const t=PERSONAS.reduce((a,p)=>a+S.sc[p],0);
-  if(t<=0)return Object.fromEntries(PERSONAS.map(p=>[p,.25]));
-  return Object.fromEntries(PERSONAS.map(p=>[p,S.sc[p]/t]));
-}
-function recompute(quiet){
-  const pr=probs();
-  const top=PERSONAS.reduce((b,p)=>pr[p]>pr[b]?p:b,PERSONAS[0]);
-  const conf=pr[top]*(1-Math.exp(-S.n/4));      // evidence gate: one signal never commits
-  const tier=conf>=.5?'adapting':conf>=.28?'hunch':'observing';
-  S.tier=tier;
-  renderBrain(pr,conf,tier,top);
-  if(tier==='adapting'&&S.mode!==top&&!S.dismissed[top])adapt(top);
-  else if(tier==='hunch'&&S.mode==='default')emphasize(top,quiet);
-  else if(tier!=='adapting'&&S.mode!=='default'&&conf<.22)adapt('default');
-}
-
-/* ---------------- adaptation: bounded regret only ---------------- */
-const HEROES={
- default:()=>`
-  <p class="kicker">Meridian Airways</p>
-  <h1>Fly the line you draw.</h1>
-  <p class="sub">190 direct routes across three continents. One fare, no games.</p>
-  <div class="search"><input id="q" type="search" autocomplete="off"
-    placeholder="Where to? Try &#8220;Lisbon in May&#8221; — or &#8220;I need to change my flight&#8221;"
-    aria-label="search flights"><button id="qgo">Search</button></div>`,
- disruption:()=>`
-  <p class="kicker">Let's fix your trip</p>
-  <h1>Rough day? We've got you.</h1>
-  <p class="status">MR 442 · GVA → LIS today · <b>delayed 16:05 → 18:20</b></p>
-  <div class="hrow">
-    <div class="hcard act"><b>Rebook to the 18:40 direct</b><small>Same fare, seat 14C held for 20 min</small><br><button class="hbtn" data-p="disruption" data-w="1.2" data-l="took the rebook">Take this flight</button></div>
-    <div class="hcard"><b>Keep my seat</b><small>We'll ping you if it slips again</small><br><button class="hbtn ghost">Hold it</button></div>
-    <div class="hcard"><b>Talk to a person</b><small>Call-back in ~2 min, no menus</small><br><button class="hbtn ghost">Call me</button></div>
+$('#list').innerHTML=FARES.map((f,i)=>`
+ <div class="fare" data-i="${i}">
+  <span class="tag" id="tag${i}"></span>
+  <div class="row">
+    <div class="tblock"><div class="tt num">${f.t} → ${f.a}</div><small>2 h 55 · direct · A220</small></div>
+    <span class="fam ${f.fam==='Flex'?'flex':''}">${f.fam}</span>
+    <span class="meta">${f.bag?'23 kg bag · free changes · seat choice':'cabin bag only · changes €45'}</span>
+    <span class="price num">€${f.pr}</span>
+    <button class="sel" data-i="${i}">Select</button>
   </div>
-  ${why('disruption')}`,
- business:()=>`
-  <p class="kicker">The shuttle desk</p>
-  <h1>Out and back by dinner.</h1>
-  <p class="sub">Next departures, one tap, receipt filed to your inbox before you land.</p>
-  <div class="hrow">
-    <div class="hcard act"><b>GVA → LHR · <span class="num">07:10</span></b><small>Wi-Fi · aisle held · <span class="num">42</span> min check-in cutoff</small><br><button class="hbtn" data-p="business" data-w="1.2" data-l="one-tap hero shuttle">Book 07:10</button></div>
-    <div class="hcard"><b>GVA → LHR · <span class="num">18:40</span></b><small>Evening return, same-day</small><br><button class="hbtn ghost">Book return</button></div>
-  </div>
-  ${why('business')}`,
- leisure:()=>`
-  <p class="kicker">Somewhere warm, sometime soon</p>
-  <h1>The water's fine in March.</h1>
-  <p class="sub">Flexible dates on, prices watched. These three are unusually good this week.</p>
-  <div class="hrow">
-    <div class="hcard act"><b>Maldives · MLE</b><small>from <span class="num">€612</span> return · save €140</small><br><button class="hbtn" data-p="leisure" data-w="1.2" data-l="opened the Maldives deal">See dates</button></div>
-    <div class="hcard"><b>Bali · DPS</b><small>from <span class="num">€489</span> return</small><br><button class="hbtn ghost">See dates</button></div>
-    <div class="hcard"><b>Athens · ATH</b><small>from <span class="num">€102</span> return</small><br><button class="hbtn ghost">See dates</button></div>
-  </div>
-  ${why('leisure')}`,
- family:()=>`
-  <p class="kicker">Little wings</p>
-  <h1>Four seats. Together. Done.</h1>
-  <p class="sub">Kids half price, seats locked side-by-side at booking, stroller to the gate. Example for 2 + 2 to Lisbon: <b class="num">€312</b> all-in.</p>
-  <div class="hrow">
-    <div class="hcard act"><b>Build the family fare</b><small>2 adults · 2 kids · bags included</small><br><button class="hbtn" data-p="family" data-w="1.2" data-l="started family fare">Start with Lisbon</button></div>
-    <div class="hcard"><b>The fine print, honestly</b><small>Changes €0–25, no ambush fees</small><br><button class="hbtn ghost">Read it</button></div>
-  </div>
-  ${why('family')}`
-};
-function why(p){
-  const r=[...new Set(S.reasons[p])].slice(-2).join(' · ')||'your signals';
-  return `<div class="why">Adapted for ${NAMES[p]} because: <em>${r}</em> ·
-    <button data-undo="${p}">not it — show the standard page</button></div>`;
-}
-const RAILS={
- disruption:`<div class="hrow"><div class="hcard"><b>Your rights on a 2h+ delay</b><small>Meal voucher unlocked · in your wallet</small></div><div class="hcard"><b>Onward connection?</b><small>LIS transfers are being held tonight</small></div></div>`,
- business:`<div class="hrow"><div class="hcard"><b>Frequent line, GVA–LHR?</b><small>A 10-trip carnet prices at <span class="num">€128</span>/leg</small></div><div class="hcard"><b>Expense export</b><small>Receipts as one monthly PDF</small></div></div>`,
- leisure:`<div class="hrow"><div class="hcard"><b>Price watch</b><small>We'll flag if Maldives drops under <span class="num">€550</span></small></div><div class="hcard"><b>Stopover trick</b><small>Add 3 days in Athens for <span class="num">€0</span> fare difference</small></div></div>`,
- family:`<div class="hrow"><div class="hcard"><b>Bassinet rows</b><small>Held on all long-haul until T-48h</small></div><div class="hcard"><b>Kids' meal boxes</b><small>Ordered at booking, free under 12</small></div></div>`
-};
+  <div class="detail"><div><p>${f.bag?'Checked 23 kg + cabin bag included · change or cancel free to T-2h · any seat, incl. front row · miles ×1.5':'Cabin bag 8 kg only · name change €25 · date change €45 + fare difference · random seat at check-in'}
+   · on-time 92% · CO₂ 118 kg est.</p></div></div>
+  <div class="reassure"><div><p>Price locked for 10 minutes once selected · free cancellation within 24 h of booking.</p></div></div>
+ </div>`).join('');
+const cards=$$('.fare');
 
-function adapt(mode){
-  const inner=$('#heroInner');
-  const apply=()=>{
-    inner.innerHTML=HEROES[mode]();
-    document.body.dataset.mode=mode;
-    S.mode=mode;
-    $('#rail').innerHTML = mode==='default'
-      ? '<div class="ph">More for you appears here as Meridian gets to know you.</div>'
-      : RAILS[mode];
-    wireHero();
-    chipGlow(mode==='default'?null:mode,true);
-  };
-  if(RM){apply();return;}
-  inner.classList.add('fade');
-  setTimeout(()=>{apply();inner.classList.remove('fade');},220);
-}
+/* ---------------- interest engine ---------------- */
+const St=FARES.map(()=>({g:0,hov:0,ret:0,flee:0,lastLeft:0,ctaMiss:0,assured:false}));
+let seq=[];            // recent meaningful hovers [{i,t,dur}]
+let feedList=[];
+const feed=(msg)=>{feedList.unshift(msg);if(feedList.length>9)feedList.pop();
+  $('#feed').innerHTML=feedList.map(m=>`<li>${m}</li>`).join('');
+  $('#pill').classList.add('live');
+  $('#pillText').textContent='the page is adapting — see how';};
 
-/* ephemeral emphasis: attention without motion — predicted chips hold, others dip */
-function emphasize(p,quiet){
-  chipGlow(p);
-  if(quiet||RM)return;
-  $$('.chip').forEach(c=>{if(c.dataset.p!==p){c.classList.add('dimmed');setTimeout(()=>c.classList.remove('dimmed'),650);}});
+let curOver=-1,enterT=0,frozen=false;
+function onEnter(i){
+  curOver=i;enterT=performance.now();
+  const s=St[i];
+  if(s.lastLeft&&performance.now()-s.lastLeft>2000&&s.hov>0){s.ret++;
+    if(s.ret===2)feed(`<b>${name(i)}</b>: opened details — you keep coming back to it`);}
+  clearTimeout(cards[i]._pw);
 }
-function chipGlow(p,keep){
-  $$('.chip').forEach(c=>c.classList.toggle('hot',!!p&&c.dataset.p===p));
+function onLeave(i,exitFast){
+  const dur=performance.now()-enterT;curOver=-1;
+  const s=St[i];s.lastLeft=performance.now();
+  if(dur<420&&exitFast){s.flee++;
+    if(s.flee===2)feed(`<b>${name(i)}</b>: receding — you looked twice and left`);}
+  else if(dur>=420){s.hov++;seq.push({i,t:performance.now(),dur});if(seq.length>8)seq.shift();detectCompare();}
 }
-
-/* ---------------- brain rendering ---------------- */
-function renderBrain(pr,conf,tier,top){
-  for(const p of PERSONAS){
-    $('#bar-'+p).style.width=(pr[p]*100).toFixed(0)+'%';
-    $('#pv-'+p).textContent=(pr[p]*100).toFixed(0)+'%';
-  }
-  $('#conf').textContent=`confidence ${(conf*100).toFixed(0)}% · tier: ${tier}${tier!=='observing'?' → '+top:''}`;
-  $('#feed').innerHTML=S.feed.map(f=>`<li>+<b>${f.p}</b> · ${f.label}</li>`).join('')||'<li>watching, not judging</li>';
-  const pill=$('#pill');
-  pill.className=tier==='adapting'?'adapting':tier==='hunch'?'hunch':'';
-  $('#pillText').textContent=
-    tier==='adapting'?`adapted for ${NAMES[top]} — why?`:
-    tier==='hunch'?`a hunch is forming — watch`:
-    `getting to know you — quietly`;
-}
-
-/* ---------------- real-signal wiring ---------------- */
-const KW={
- disruption:['delay','delayed','cancel','cancelled','change my','rebook','refund','missed','status','stuck','help'],
- business:['tomorrow','morning','meeting','wifi','receipt','invoice','expense','corporate','flexible','same-day','lhr','frankfurt','geneva'],
- leisure:['bali','maldives','beach','deal','cheap','holiday','vacation','honeymoon','somewhere','warm','may','summer','lisbon','athens','tokyo'],
- family:['kids','kid','child','children','infant','baggage','stroller','pram','seats together','family','car seat']
-};
-function scanQuery(q){
-  q=q.toLowerCase();
-  for(const p of PERSONAS)for(const kw of KW[p]){
-    const key=p+':'+kw;
-    if(q.includes(kw)&&!S.credited.has(key)){S.credited.add(key);signal(p,1.2,`typed “${kw}”`);}
-  }
-}
-function wireHero(){
-  const q=$('#q');
-  if(q){
-    q.addEventListener('input',()=>scanQuery(q.value));
-    q.addEventListener('keydown',e=>{if(e.key==='Enter')commitSearch(q.value);});
-    const go=$('#qgo');if(go)go.addEventListener('click',()=>commitSearch(q.value));
-  }
-  $$('#heroInner [data-p]').forEach(b=>b.addEventListener('click',()=>signal(b.dataset.p,+b.dataset.w,b.dataset.l)));
-  $$('#heroInner [data-undo]').forEach(b=>b.addEventListener('click',()=>{
-    const p=b.dataset.undo;S.dismissed[p]=true;S.sc[p]*=0.15;
-    S.feed.unshift({p,label:'you said no — strong negative'});
-    adapt('default');recompute(true);
-  }));
-}
-function commitSearch(v){
-  if(!v.trim())return;
-  scanQuery(v);
-  const pr=probs();const top=PERSONAS.reduce((b,p)=>pr[p]>pr[b]?p:b,PERSONAS[0]);
-  if(S.sc[top]>0)signal(top,1.4,'committed a search');
-}
-
-/* chips, cards, hovers, dwells, rage, copy, details */
-$$('.chip').forEach(c=>c.addEventListener('click',()=>signal(c.dataset.p,+c.dataset.w,c.dataset.l)));
-$$('[data-hov]').forEach(el=>{
-  let t;const[p,w,label]=el.dataset.hov.split(':');let last=0;
-  el.addEventListener('pointerenter',()=>{t=setTimeout(()=>{
-    if(Date.now()-last>20000){last=Date.now();signal(p,+w,label);}},450);});
-  el.addEventListener('pointerleave',()=>clearTimeout(t));
+cards.forEach((c,i)=>{
+  c.addEventListener('pointerenter',()=>onEnter(i));
+  c.addEventListener('pointerleave',()=>onLeave(i,lastSpeed>0.55));
 });
-const dwellSeen={};
-const io=new IntersectionObserver(es=>es.forEach(e=>{
-  const el=e.target,p=el.dataset.dwell;
-  if(e.intersectionRatio>.55){
-    el._dt=setTimeout(()=>{if(!dwellSeen[p]||Date.now()-dwellSeen[p]>30000){dwellSeen[p]=Date.now();signal(p,0.7,el.dataset.dl);}},2600);
-  }else clearTimeout(el._dt);
-}),{threshold:[.55]});
-$$('[data-dwell]').forEach(el=>io.observe(el));
-let clicks=[];
-document.addEventListener('click',e=>{
+/* CTA hesitation */
+$$('.sel').forEach(b=>{
+  const i=+b.dataset.i;let t0=0;
+  b.addEventListener('pointerenter',()=>t0=performance.now());
+  b.addEventListener('pointerleave',()=>{
+    if(performance.now()-t0>350){const s=St[i];s.ctaMiss++;
+      if(s.ctaMiss>=2&&!s.assured){s.assured=true;cards[i].classList.add('assure');
+        feed(`<b>${name(i)}</b>: hesitation noticed — answered it under the button`);}}});
+  b.addEventListener('click',e=>{e.preventDefault();
+    feed(`<b>${name(i)}</b>: selected — this is where booking would start`);});
+});
+
+/* gravity + approach prediction from raw pointer motion */
+let lastP=null,lastSpeed=0,moveGate=0;
+function onMove(x,y,synthetic){
   const now=performance.now();
-  clicks=clicks.filter(c=>now-c.t<900&&Math.hypot(c.x-e.clientX,c.y-e.clientY)<60);
-  clicks.push({t:now,x:e.clientX,y:e.clientY});
-  if(clicks.length>=3){clicks=[];signal('disruption',2,'rapid repeated clicking — something is stuck');}
-});
-document.addEventListener('copy',()=>{
-  const sel=document.getSelection();const el=sel&&sel.anchorNode&&sel.anchorNode.parentElement;
-  const sec=el&&el.closest('[data-dwell]');
-  signal(sec?sec.dataset.dwell:'business',0.6,'copied details off the page');
-});
-$$('details[data-open]').forEach(d=>d.addEventListener('toggle',()=>{
-  if(d.open){const[p,w,label]=d.dataset.open.split(':');signal(p,+w,label);}
-}));
+  if(now-moveGate<45)return;moveGate=now;
+  let vx=0,vy=0;
+  if(lastP){const dt=now-lastP.t||1;vx=(x-lastP.x)/dt;vy=(y-lastP.y)/dt;
+    lastSpeed=Math.hypot(vx,vy);}
+  lastP={x,y,t:now};
+  cards.forEach((c,i)=>{
+    const r=c.getBoundingClientRect();
+    if(r.bottom<-40||r.top>innerHeight+40)return;
+    const inX=x>=r.left&&x<=r.right,inY=y>=r.top&&y<=r.bottom;
+    if(inX&&inY)St[i].g+=1.0;
+    else{const dx=Math.max(r.left-x,0,x-r.right),dy=Math.max(r.top-y,0,y-r.bottom);
+      if(Math.hypot(dx,dy)<110)St[i].g+=0.3;}
+  });
+  /* approach: project 220ms ahead; pre-open the destination before arrival */
+  if(lastSpeed>0.55){
+    const px=x+vx*220,py=y+vy*220;
+    cards.forEach((c,i)=>{
+      if(i===curOver||c.classList.contains('open'))return;
+      const r=c.getBoundingClientRect();
+      if(px>=r.left&&px<=r.right&&py>=r.top&&py<=r.bottom){
+        c.classList.add('open');
+        if(!c._pwLog){c._pwLog=true;feed(`<b>${name(i)}</b>: pre-opened — your cursor was heading there`);
+          setTimeout(()=>c._pwLog=false,8000);}
+        c._pw=setTimeout(()=>{if(curOver!==i&&rank().top!==i)c.classList.remove('open');},1100);
+      }});
+  }
+}
+document.addEventListener('pointermove',e=>onMove(e.clientX,e.clientY),{passive:true});
 
-/* tiny context prior — labelled honestly, small enough to never commit alone */
-(function(){
-  const h=new Date().getHours(),wd=new Date().getDay();
-  if(h>=22||h<5)signal('disruption',0.35,'prior: late-night visit');
-  else if(h>=6&&h<10&&wd>=1&&wd<=5)signal('business',0.3,'prior: weekday morning');
-  else if(wd===0||wd===6)signal('leisure',0.3,'prior: weekend browsing');
-})();
+/* comparison detection: A,B,A within recent meaningful hovers */
+let cmpPair=null,cmpT=0;
+function detectCompare(){
+  const s=seq.slice(-3);
+  if(s.length<3)return;
+  const [a,b,c]=s.map(x=>x.i);
+  if(a===c&&a!==b&&s[2].t-s[0].t<14000){
+    const pair=[Math.min(a,b),Math.max(a,b)].join('-');
+    if(cmpPair!==pair){cmpPair=pair;showCompare(Math.min(a,b),Math.max(a,b));}
+    cmpT=performance.now();
+  }
+}
+function showCompare(i,j){
+  const A=FARES[i],B=FARES[j];const parts=[];
+  parts.push(`<b>€${Math.abs(A.pr-B.pr)}</b> apart`);
+  if(A.t!==B.t)parts.push(`${A.t} vs ${B.t}`);
+  if(A.bag!==B.bag)parts.push(`checked bag only on <b>${A.bag?name(i):name(j)}</b>`);
+  if(A.chg!==B.chg)parts.push(`free changes only on <b>${A.chg===0?name(i):name(j)}</b>`);
+  if(A.bag===B.bag&&A.chg===B.chg)parts.push('same conditions — the cheaper one wins');
+  $('#cmpTxt').innerHTML=`You seem to be weighing <b>${name(i)}</b> against <b>${name(j)}</b> — ${parts.join(' · ')}.`;
+  const later=cards[j];later.after($('#cmp'));
+  $('#cmp').classList.add('on');
+  feed(`comparing <b>${name(i)}</b> ⇄ <b>${name(j)}</b> — pinned the difference`);
+}
 
-/* ---------------- pill / drawer / reset ---------------- */
-$('#pill').addEventListener('click',()=>{
-  const b=$('#brain');b.classList.toggle('open');
-  $('#pill').setAttribute('aria-expanded',b.classList.contains('open'));
-});
+/* backtrack: fast down, quick return → pulse the highest-interest fare in view */
+let scrollHist=[],lastPulse=0;
+addEventListener('scroll',()=>{
+  const now=performance.now();scrollHist.push({y:scrollY,t:now});
+  scrollHist=scrollHist.filter(h=>now-h.t<4000);
+  const first=scrollHist[0];
+  if(first&&first.y-scrollY>320&&Math.max(...scrollHist.map(h=>h.y))-first.y>-1&&now-lastPulse>30000){
+    const peak=Math.max(...scrollHist.map(h=>h.y));
+    if(peak-scrollY>320&&peak-first.y>250){
+      lastPulse=now;const t=rank().top;
+      if(t>=0){cards[t].classList.add('pulse');setTimeout(()=>cards[t].classList.remove('pulse'),3200);
+        feed(`<b>${name(t)}</b>: soft pulse — you scrolled back looking for something`);}
+    }
+  }
+},{passive:true});
+
+/* ranking → micrograded application */
+function score(i){const s=St[i];return s.g*0.06+s.hov*1.4+s.ret*2.6-s.flee*2.2;}
+function rank(){
+  let top=-1,best=1.8;
+  cards.forEach((c,i)=>{const sc=score(i);if(sc>best){best=sc;top=i;}});
+  return {top};
+}
+setInterval(()=>{
+  if(frozen)return;
+  const {top}=rank();
+  cards.forEach((c,i)=>{
+    const s=St[i],sc=score(i);
+    s.g*=0.965;                                     // the page relaxes when you do
+    c.classList.toggle('hi',i===top);
+    c.classList.toggle('lo',s.flee>=2&&sc<1.2);
+    if(i===top&&sc>3.2)c.classList.add('open');
+    else if(s.ret>=2)c.classList.add('open');
+    else if(i!==curOver&&!c._pw&&sc<1.4)c.classList.remove('open');
+    $('#tag'+i).textContent=`w ${sc.toFixed(1)} · h${s.hov} r${s.ret} f${s.flee}`+
+      (c.classList.contains('open')?' · open':'')+(s.assured?' · assured':'')+
+      (c.classList.contains('lo')?' · receded':'');
+  });
+  if(cmpPair&&performance.now()-cmpT>25000){$('#cmp').classList.remove('on');cmpPair=null;}
+  renderBars();
+},700);
+function renderBars(){
+  const idx=[...FARES.keys()].sort((a,b)=>score(b)-score(a)).slice(0,4);
+  const mx=Math.max(0.001,score(idx[0]));
+  $('#bars').innerHTML=idx.map(i=>
+   `<div class="brow"><span>${name(i)} €${FARES[i].pr}</span>
+     <div class="btrack"><div class="bfill" style="width:${Math.max(0,score(i)/mx*100).toFixed(0)}%"></div></div></div>`).join('');
+}
+
+/* ---------------- drawer, toggles, reset ---------------- */
+$('#pill').addEventListener('click',()=>{const b=$('#brain');b.classList.toggle('open');
+  $('#pill').setAttribute('aria-expanded',b.classList.contains('open'));});
+$('#tglReveal').addEventListener('click',e=>{document.body.classList.toggle('reveal');
+  e.target.classList.toggle('on');});
+$('#tglFreeze').addEventListener('click',e=>{frozen=document.body.classList.toggle('frozen');
+  e.target.classList.toggle('on');
+  $('#pillText').textContent=frozen?'frozen — this is the page without it':'the page is adapting — see how';});
 $('#resetB').addEventListener('click',reset);
 function reset(){
-  for(const p of PERSONAS){S.sc[p]=0;S.reasons[p]=[];}
-  S.n=0;S.feed=[];S.dismissed={};S.credited.clear();
-  adapt('default');chipGlow(null);recompute(true);
+  St.forEach(s=>Object.assign(s,{g:0,hov:0,ret:0,flee:0,lastLeft:0,ctaMiss:0,assured:false}));
+  seq=[];cmpPair=null;feedList=[];
+  cards.forEach(c=>{c.classList.remove('hi','lo','open','assure','pulse');c._pwLog=false;});
+  $('#cmp').classList.remove('on');
+  $('#feed').innerHTML='<li>watching, not judging</li>';
+  $('#pill').classList.remove('live');
+  $('#pillText').textContent='reading the room — quietly';renderBars();
 }
 
-/* ---------------- ghost-cursor simulations ---------------- */
+/* ---------------- ghost: replays REAL pointer events ---------------- */
+const ghost=$('#ghost');let gx=innerWidth/2,gy=innerHeight/2,gOver=-1,gBtn=null;
+function gDispatch(x,y){
+  gx=x;gy=y;ghost.style.left=x+'px';ghost.style.top=y+'px';
+  onMove(x,y,true);
+  let over=-1;
+  cards.forEach((c,i)=>{const r=c.getBoundingClientRect();
+    if(x>=r.left&&x<=r.right&&y>=r.top&&y<=r.bottom)over=i;});
+  if(over!==gOver){
+    if(gOver>=0)cards[gOver].dispatchEvent(new PointerEvent('pointerleave'));
+    if(over>=0)cards[over].dispatchEvent(new PointerEvent('pointerenter'));
+    gOver=over;
+  }
+  let btn=null;
+  $$('.sel').forEach(b=>{const r=b.getBoundingClientRect();
+    if(x>=r.left&&x<=r.right&&y>=r.top&&y<=r.bottom)btn=b;});
+  if(btn!==gBtn){
+    if(gBtn)gBtn.dispatchEvent(new PointerEvent('pointerleave'));
+    if(btn)btn.dispatchEvent(new PointerEvent('pointerenter'));
+    gBtn=btn;
+  }
+}
 const wait=ms=>new Promise(r=>setTimeout(r,RM?ms/3:ms));
-const ghost=$('#ghost');
-async function gTo(sel){
-  const el=typeof sel==='string'?$(sel):sel;if(!el)return null;
-  el.scrollIntoView({behavior:RM?'auto':'smooth',block:'center'});await wait(480);
-  const r=el.getBoundingClientRect();
-  ghost.style.left=(r.x+r.width/2)+'px';ghost.style.top=(r.y+r.height/2)+'px';
-  el.classList.add('gaze');await wait(620);el.classList.remove('gaze');
-  return el;
+async function glide(x1,y1,ms){
+  // fixed-interval stepper, not rAF: embedded panes throttle rAF hard enough to
+  // stall the choreography, and the engine only sees what gets dispatched.
+  const x0=gx,y0=gy,t0=performance.now();
+  return new Promise(res=>{(function step(){
+    const p=Math.min(1,(performance.now()-t0)/ms),e=p<.5?2*p*p:1-((-2*p+2)**2)/2;
+    gDispatch(x0+(x1-x0)*e,y0+(y1-y0)*e);
+    p<1?setTimeout(step,30):res();})();});
 }
-async function gClick(sel){const el=await gTo(sel);if(!el)return;ghost.classList.add('click');el.click();await wait(380);ghost.classList.remove('click');}
-async function gType(text){
-  const q=$('#q');if(!q)return;await gTo(q);q.focus();q.value='';
-  for(const ch of text){q.value+=ch;q.dispatchEvent(new Event('input',{bubbles:true}));await wait(38+Math.random()*50);}
-  await wait(300);
-}
+const center=i=>{const r=cards[i].getBoundingClientRect();return[r.left+r.width*0.45,r.top+r.height/2];};
+const btnCenter=i=>{const r=cards[i].querySelector('.sel').getBoundingClientRect();
+  return[r.left+r.width/2,r.top+r.height/2];};
+async function gGo(i,ms=520){cards[i].scrollIntoView({behavior:RM?'auto':'smooth',block:'center'});
+  await wait(420);const[x,y]=center(i);await glide(x,y,ms);}
+
 const SIMS={
- disruption:async()=>{await gType('my flight is delayed, help me rebook');await wait(700);
-   const el=$('#heroInner .hbtn');if(el)await gClick(el);},
- business:async()=>{await gTo('#shuttles');signal('business',0.7,'read the shuttle timetable');
-   await gTo('#shuttles .shuttle');signal('business',0.5,'hovered GVA–LHR');
-   await gClick('#shuttles .shuttle button');await gType('lhr tomorrow morning, wifi receipt');},
- leisure:async()=>{await gTo('.g-lis');signal('leisure',0.5,'looked at Lisbon');
-   await gTo('.g-dps');signal('leisure',0.6,'lingered on Bali');
-   await gTo('.g-mle');signal('leisure',0.6,'lingered on Maldives');signal('leisure',0.7,'lingered on destinations');
-   await gClick('.g-mle');signal('leisure',1.2,'opened the Maldives fare');},
- family:async()=>{await gTo('#family');signal('family',0.7,'read the family section slowly');
-   const d=$('#family details');await gTo(d);d.open=true;signal('family',0.9,'opened the fare fine print');
-   await wait(600);await gType('2 kids, stroller, seats together');},
+ comparer:async()=>{await gGo(2);await wait(900);await gGo(4);await wait(900);
+   await gGo(2);await wait(750);await gGo(4);await wait(900);await glide(gx,gy-130,400);},
+ hesitator:async()=>{await gGo(3);await wait(500);
+   const[bx,by]=btnCenter(3);await glide(bx,by,450);await wait(750);
+   await glide(bx-260,by+90,500);await wait(900);
+   await glide(bx,by,450);await wait(800);await glide(bx-240,by-70,500);await wait(600);},
+ returner:async()=>{for(let k=0;k<3;k++){await gGo(5);await wait(700);
+   await glide(gx-230,gy+120,450);await wait(RM?800:2400);}await gGo(5);},
+ hunter:async()=>{await gGo(1);await wait(800);
+   window.scrollTo({top:document.body.scrollHeight,behavior:RM?'auto':'smooth'});await wait(1300);
+   window.scrollTo({top:0,behavior:RM?'auto':'smooth'});await wait(1200);},
 };
 let simRunning=false;
 $$('[data-sim]').forEach(b=>b.addEventListener('click',async()=>{
   if(simRunning)return;simRunning=true;
   $$('[data-sim]').forEach(x=>x.disabled=true);
-  reset();$('#brain').classList.add('open');
-  ghost.style.display='block';
-  const r0=b.getBoundingClientRect();ghost.style.left=r0.x+'px';ghost.style.top=r0.y+'px';
-  await wait(300);
+  reset();ghost.style.display='block';gDispatch(innerWidth/2,innerHeight/2);
   try{await SIMS[b.dataset.sim]();}finally{
-    await wait(900);ghost.style.display='none';
-    $$('[data-sim]').forEach(x=>x.disabled=false);simRunning=false;
-    window.scrollTo({top:0,behavior:RM?'auto':'smooth'});
-  }
+    await wait(1200);ghost.style.display='none';gOver=-1;gBtn=null;
+    $$('[data-sim]').forEach(x=>x.disabled=false);simRunning=false;}
 }));
-
-/* boot */
-adapt('default');recompute(true);
+renderBars();
 </script>
 </body>
 </html>

@@ -19,7 +19,7 @@ SITE = ROOT / "site"
 # in a gallery of many, so "Reference Architecture" becomes a proper noun phrase.
 DOCS = [
     ("demo.html", None, "Meridian Airways", "Live Demo",
-     "A synthetic airline that learns an anonymous visitor in seconds and adapts, with the machinery on display."),
+     "A fare page that reads cursor behaviour alone — gravity, returns, hesitation — and adapts in micro-steps, with a reveal layer and a freeze toggle to prove it."),
     ("signals.html", None, "Zero-Login Signal Surface", "Signal Surface",
      "Everything determinable about an anonymous visitor, computed live on your own device."),
     ("architecture.html", "ARCHITECTURE.md", "Anonymous Personalization Architecture", "Architecture",
