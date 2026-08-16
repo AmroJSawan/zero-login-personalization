@@ -1,0 +1,486 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Zero-Login Signal Surface</title>
+<style>
+  :root{
+    --bg:#0b0d10; --panel:#12151a; --panel2:#171b21; --line:#232830;
+    --ink:#e6e9ee; --dim:#8b95a5; --faint:#5b6474;
+    --ok:#3fb950; --warn:#d29922; --bad:#f85149; --acc:#58a6ff; --acc2:#bc8cff;
+    --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,monospace;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font:14px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif}
+  header{padding:28px 24px 18px;border-bottom:1px solid var(--line)}
+  h1{margin:0 0 6px;font-size:20px;letter-spacing:-.01em}
+  .sub{color:var(--dim);font-size:13px;max-width:70ch}
+  .wrap{display:grid;grid-template-columns:1fr 340px;gap:0;align-items:start}
+  @media(max-width:900px){.wrap{grid-template-columns:1fr}}
+  main{padding:20px 24px 60px;min-width:0}
+  aside{position:sticky;top:0;padding:20px 24px 40px;border-left:1px solid var(--line);
+    height:100vh;overflow:auto}
+  @media(max-width:900px){aside{position:static;height:auto;border-left:0;border-top:1px solid var(--line)}}
+  section{margin-bottom:26px}
+  h2{font-size:12px;text-transform:uppercase;letter-spacing:.09em;color:var(--dim);
+    margin:0 0 10px;font-weight:600}
+  table{width:100%;border-collapse:collapse;font-family:var(--mono);font-size:12px}
+  th{text-align:left;font-weight:500;color:var(--faint);padding:4px 8px;font-size:10px;
+    text-transform:uppercase;letter-spacing:.06em;border-bottom:1px solid var(--line)}
+  td{padding:5px 8px;border-bottom:1px solid #1a1e25;vertical-align:top}
+  tr:hover td{background:#141821}
+  .k{color:var(--dim);white-space:nowrap}
+  .v{color:var(--ink);word-break:break-word}
+  .v.null{color:var(--faint);font-style:italic}
+  .bits{text-align:right;color:var(--acc2);white-space:nowrap}
+  .lg{width:8px}
+  .dot{display:inline-block;width:7px;height:7px;border-radius:50%}
+  .g{background:var(--ok)} .a{background:var(--warn)} .r{background:var(--bad)}
+  .meter{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:14px;margin-bottom:16px}
+  .big{font-family:var(--mono);font-size:30px;line-height:1;margin:6px 0 2px}
+  .bar{height:6px;background:#1c2029;border-radius:3px;overflow:hidden;margin:10px 0 6px}
+  .bar i{display:block;height:100%;background:linear-gradient(90deg,var(--ok),var(--warn),var(--bad));width:0%}
+  .note{font-size:11px;color:var(--faint);line-height:1.45}
+  .live{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:12px;margin-bottom:14px}
+  .live h3{margin:0 0 8px;font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--dim);font-weight:600}
+  .lrow{display:flex;justify-content:space-between;font-family:var(--mono);font-size:11px;padding:2px 0;color:var(--dim)}
+  .lrow b{color:var(--ink);font-weight:500}
+  .legend{display:flex;gap:14px;flex-wrap:wrap;font-size:11px;color:var(--dim);margin:10px 0 0}
+  .legend span{display:flex;align-items:center;gap:5px}
+  .cant td{color:var(--faint)}
+  .cant .v{color:var(--bad);font-style:normal}
+  code{font-family:var(--mono);font-size:11px;background:#1a1e25;padding:1px 4px;border-radius:3px;color:var(--acc)}
+  .scroll-target{height:900px;background:linear-gradient(180deg,#12151a,#0b0d10);border:1px dashed var(--line);
+    border-radius:8px;display:flex;align-items:center;justify-content:center;color:var(--faint);font-size:12px;margin-top:10px}
+</style>
+</head>
+<body>
+<header>
+  <h1>Zero-Login Signal Surface</h1>
+  <div class="sub">Everything this page can determine about you with no account, no login, and no permission prompt.
+  Nothing here is transmitted anywhere: all of it is computed locally in your browser. The tables are the first-shot
+  surface, available before you do anything. The right-hand panel is the temporal layer: move your mouse, scroll, and
+  type in the box, and watch the session climb the knowledge ladder from T0 toward T5, the point at which published
+  results say frustration becomes reliably classifiable.</div>
+  <div class="legend">
+    <span><i class="dot g"></i> No consent needed: transmitted by the browser, or needed to render</span>
+    <span><i class="dot a"></i> Consent required: device storage or access under ePrivacy Art. 5(3)</span>
+    <span><i class="dot r"></i> Fingerprinting-grade: do not collect</span>
+  </div>
+</header>
+
+<div class="wrap">
+<main>
+  <section><h2>Layer 0 &middot; Server side, zero JavaScript</h2>
+    <table><thead><tr><th class="lg"></th><th>Signal</th><th>Value seen by the server</th><th class="bits">bits</th></tr></thead>
+    <tbody id="t-server"></tbody></table>
+    <div class="note" style="margin-top:8px">These arrive in the HTTP request itself. A CDN worker sees them before a single byte of your page is sent, which is why a useful prior is available at t=2ms.</div>
+  </section>
+
+  <section><h2>Layer 1 &middot; Device and display</h2>
+    <table><thead><tr><th class="lg"></th><th>Signal</th><th>Value</th><th class="bits">bits</th></tr></thead>
+    <tbody id="t-device"></tbody></table>
+  </section>
+
+  <section><h2>Layer 2 &middot; Locale and time</h2>
+    <table><thead><tr><th class="lg"></th><th>Signal</th><th>Value</th><th class="bits">bits</th></tr></thead>
+    <tbody id="t-locale"></tbody></table>
+  </section>
+
+  <section><h2>Layer 3 &middot; Declared preferences</h2>
+    <table><thead><tr><th class="lg"></th><th>Signal</th><th>Value</th><th class="bits">bits</th></tr></thead>
+    <tbody id="t-prefs"></tbody></table>
+    <div class="note" style="margin-top:8px">Accessibility and comfort preferences the user has already set at OS level. The highest-value, lowest-risk signals on the page: they are explicit user intent, cost nothing, and adapting to them is unambiguously in the user's interest.</div>
+  </section>
+
+  <section><h2>Layer 4 &middot; Capability and permission state</h2>
+    <table><thead><tr><th class="lg"></th><th>Signal</th><th>Value</th><th class="bits">bits</th></tr></thead>
+    <tbody id="t-cap"></tbody></table>
+    <div class="note" style="margin-top:8px">Permission states are readable <em>without</em> prompting. Knowing geolocation is already <code>denied</code> means never showing a "find services near me" button that will fail.</div>
+  </section>
+
+  <section><h2>Layer 5 &middot; Network and performance, measured</h2>
+    <table><thead><tr><th class="lg"></th><th>Signal</th><th>Value</th><th class="bits">bits</th></tr></thead>
+    <tbody id="t-net"></tbody></table>
+  </section>
+
+  <section><h2>What cannot be known</h2>
+    <table><thead><tr><th class="lg"></th><th>Commonly assumed</th><th>Reality</th><th class="bits"></th></tr></thead>
+    <tbody id="t-cant" class="cant"></tbody></table>
+  </section>
+
+  <section><h2>Behavioural layer &middot; scroll this</h2>
+    <label class="note">Type here to populate keyboard signals (nothing is stored or sent):<br>
+    <input id="probe" style="margin-top:6px;width:100%;max-width:420px;background:var(--panel2);border:1px solid var(--line);
+      color:var(--ink);padding:8px 10px;border-radius:6px;font-family:var(--mono);font-size:12px" placeholder="type, correct a typo, paste something"></label>
+    <div class="scroll-target">keep scrolling &mdash; depth, velocity and dwell are being derived on the right</div>
+  </section>
+</main>
+
+<aside>
+  <div class="meter">
+    <div class="note">Accumulated identifying entropy</div>
+    <div class="big" id="ent">0.0 <span style="font-size:14px;color:var(--dim)">bits</span></div>
+    <div class="bar"><i id="entbar"></i></div>
+    <div class="note" id="entnote">~33 bits uniquely identifies one person on Earth. This meter counts only the passive signals above, before any fingerprinting technique is applied.</div>
+  </div>
+
+  <div class="live" style="border-color:#2d3a4d">
+    <h3>Session stage</h3>
+    <div class="lrow"><span>events observed</span><b id="t-n">0</b></div>
+    <div class="lrow"><span>stage</span><b id="t-stage">T0</b></div>
+    <div class="note" id="t-know" style="margin-top:6px">Headers only. Locale, device, network and accessibility preferences are known. Intent is not.</div>
+    <div class="bar" style="margin-top:10px"><i id="t-bar" style="background:linear-gradient(90deg,#58a6ff,#3fb950)"></i></div>
+    <div class="note">Published result: a sequence model classifies session frustration reliably from the first 20 to 30 interactions (~91% accuracy, ROC AUC 0.97).</div>
+  </div>
+
+  <div class="live"><h3>Pointer</h3>
+    <div class="lrow"><span>samples</span><b id="p-n">0</b></div>
+    <div class="lrow"><span>path entropy</span><b id="p-ent">–</b></div>
+    <div class="lrow"><span>directness</span><b id="p-dir">–</b></div>
+    <div class="lrow"><span>hesitations</span><b id="p-hes">0</b></div>
+    <div class="lrow"><span>peak velocity</span><b id="p-vel">–</b></div>
+    <div class="lrow"><span>input type</span><b id="p-type">–</b></div>
+  </div>
+
+  <div class="live"><h3>Scroll and attention</h3>
+    <div class="lrow"><span>max depth</span><b id="s-depth">0%</b></div>
+    <div class="lrow"><span>mean velocity</span><b id="s-vel">–</b></div>
+    <div class="lrow"><span>direction changes</span><b id="s-rev">0</b></div>
+    <div class="lrow"><span>reading mode</span><b id="s-mode">–</b></div>
+    <div class="lrow"><span>tab visible for</span><b id="s-vis">0s</b></div>
+    <div class="lrow"><span>focus losses</span><b id="s-blur">0</b></div>
+  </div>
+
+  <div class="live"><h3>Keyboard</h3>
+    <div class="lrow"><span>keystrokes</span><b id="k-n">0</b></div>
+    <div class="lrow"><span>mean flight</span><b id="k-flight">–</b></div>
+    <div class="lrow"><span>corrections</span><b id="k-back">0</b></div>
+    <div class="lrow"><span>paste events</span><b id="k-paste">0</b></div>
+  </div>
+
+  <div class="live"><h3>Frustration</h3>
+    <div class="lrow"><span>rage clicks</span><b id="f-rage">0</b></div>
+    <div class="lrow"><span>dead clicks</span><b id="f-dead">0</b></div>
+    <div class="lrow"><span>thrashed cursor</span><b id="f-thrash">0</b></div>
+    <div class="lrow"><span>copy events</span><b id="f-copy">0</b></div>
+    <div class="lrow"><span>exit intent</span><b id="f-exit">no</b></div>
+    <div class="lrow" style="margin-top:6px;border-top:1px solid #232830;padding-top:6px">
+      <span>combined state</span><b id="f-state">scanning</b></div>
+    <div class="note" style="margin-top:6px">Single events are noise. Vendors require a combined threshold before declaring frustration, which is what this row applies.</div>
+  </div>
+
+  <div class="live"><h3>Derived rendering policy</h3>
+    <div class="lrow"><span>prefetch</span><b id="d-pre">–</b></div>
+    <div class="lrow"><span>motion</span><b id="d-mot">–</b></div>
+    <div class="lrow"><span>image tier</span><b id="d-img">–</b></div>
+    <div class="lrow"><span>JS budget</span><b id="d-js">–</b></div>
+    <div class="note" style="margin-top:8px">Produced by deterministic rules, not a model. Nothing here needs machine learning.</div>
+  </div>
+</aside>
+</div>
+
+<script>
+const $ = id => document.getElementById(id);
+const nn = v => (v===undefined||v===null||v==='') ? null : v;
+
+// Entropy estimates are order-of-magnitude figures from the public fingerprinting
+// literature (Panopticlick / AmIUnique style surveys), not measurements of you.
+// Counted separately on purpose. The meter must reflect what a compliant system
+// actually collects; folding in the fingerprinting rows would inflate it with
+// signals the architecture explicitly refuses to take.
+let totalBits = 0;   // green + amber: legitimately collectable
+let fpBits = 0;      // red: fingerprinting-grade, excluded from the meter
+function row(tbody, legal, key, val, bits, note){
+  const has = nn(val) !== null;
+  if (has && bits) { if (legal === 'r') fpBits += bits; else totalBits += bits; }
+  const tr = document.createElement('tr');
+  tr.innerHTML = `<td><i class="dot ${legal}"></i></td>
+    <td class="k">${key}${note?`<br><span style="color:#4b5464;font-size:10px">${note}</span>`:''}</td>
+    <td class="v ${has?'':'null'}">${has?String(val):'unavailable'}</td>
+    <td class="bits">${has&&bits?bits.toFixed(1):''}</td>`;
+  tbody.appendChild(tr);
+}
+
+// ---- Layer 0: what the server sees without any JS ------------------------
+const srv = $('t-server');
+row(srv,'g','Accept-Language','sent by browser (see navigator.languages below)',2.5);
+row(srv,'g','User-Agent',navigator.userAgent,10.0);
+row(srv,'g','Sec-CH-UA-Mobile',/Mobi|Android|iPhone/.test(navigator.userAgent)?'?1':'?0',1.0);
+row(srv,'g','Sec-CH-UA-Platform',navigator.userAgentData?.platform ?? navigator.platform,2.0);
+row(srv,'g','Referer',nn(document.referrer) ?? 'none (direct or stripped)',2.0);
+row(srv,'g','Sec-Fetch-Site',location.ancestorOrigins?.length?'cross-site':'none',0.5,'navigation context');
+row(srv,'g','Sec-GPC / DNT',navigator.globalPrivacyControl===true?'1 — MUST be honoured':(navigator.doNotTrack ?? 'not set'),0,'a legal instruction, not a data point');
+row(srv,'g','Save-Data',navigator.connection?.saveData===true?'on':'off',0.3);
+row(srv,'g','IP → country / region / city','resolved server-side, city granularity',6.0,'never lat/long without permission');
+row(srv,'g','IP → ASN / carrier','residential vs mobile vs corporate vs datacentre',4.0);
+row(srv,'g','TCP RTT (clientTcpRtt)','measured at CDN edge, real network quality',1.0);
+row(srv,'r','TLS fingerprint (JA3/JA4)','identifies the client stack',6.0,'fingerprinting — bot defence only, never personalization');
+row(srv,'g','Entry URL + UTM params',
+  location.protocol.startsWith('http') ? location.pathname + (location.search || ' (no query)')
+  : `not meaningful on ${location.protocol} — serve over http to see this`, 3.0);
+row(srv,'g','Request time + IP timezone','local hour, weekday, business hours',2.0);
+
+// ---- Layer 1: device ------------------------------------------------------
+const dev = $('t-device');
+row(dev,'g','screen.width × height',`${screen.width} × ${screen.height}`,4.8);
+row(dev,'g','availWidth × availHeight',`${screen.availWidth} × ${screen.availHeight}`,1.5,'reveals OS chrome / taskbar');
+row(dev,'g','devicePixelRatio',devicePixelRatio,1.5);
+row(dev,'g','viewport',`${innerWidth} × ${innerHeight}`,2.0);
+row(dev,'g','colorDepth / pixelDepth',`${screen.colorDepth} / ${screen.pixelDepth}`,0.5);
+row(dev,'g','screen.orientation',screen.orientation?.type,0.5);
+row(dev,'g','navigator.hardwareConcurrency',navigator.hardwareConcurrency,2.0,'CPU cores');
+row(dev,'g','navigator.deviceMemory',navigator.deviceMemory?navigator.deviceMemory+' GB (bucketed)':null,1.5);
+row(dev,'g','navigator.maxTouchPoints',navigator.maxTouchPoints,1.0);
+row(dev,'a','navigator.userAgentData high entropy','requires getHighEntropyValues() call',4.0,'model, arch, full OS version');
+row(dev,'r','WebGL renderer string','GPU vendor + model',9.0,'fingerprinting — do not collect');
+row(dev,'r','Canvas / audio fingerprint','rendering micro-differences',10.0,'fingerprinting — do not collect');
+row(dev,'r','Font enumeration','installed font list',8.0,'fingerprinting — do not collect');
+
+// ---- Layer 2: locale ------------------------------------------------------
+const loc = $('t-locale');
+const dtf = Intl.DateTimeFormat().resolvedOptions();
+row(loc,'g','IANA timezone',dtf.timeZone,3.0,'high signal; mismatch vs IP geo implies VPN or travel');
+row(loc,'g','UTC offset',new Date().getTimezoneOffset()/-60+'h',0,'redundant with the above');
+row(loc,'g','navigator.languages',navigator.languages?.join(', '),2.5,'ordered preference, richer than Accept-Language');
+row(loc,'g','resolved locale',dtf.locale,1.0);
+row(loc,'g','calendar system',dtf.calendar,0.5,'islamic / gregory distinguishes user groups');
+row(loc,'g','numbering system',dtf.numberingSystem,0.5,'arab vs latn drives numeral rendering');
+row(loc,'g','first day of week',(()=>{try{return new Intl.Locale(navigator.language).getWeekInfo?.().firstDay ?? 'n/a'}catch{return 'n/a'}})(),0.3);
+row(loc,'g','local time now',new Date().toLocaleString(),0,'joins to prayer times, holidays, business hours');
+
+// ---- Layer 3: preferences -------------------------------------------------
+const pf = $('t-prefs');
+const mq = q => matchMedia(q).matches;
+row(pf,'g','prefers-color-scheme',mq('(prefers-color-scheme: dark)')?'dark':'light',1.0);
+row(pf,'g','prefers-reduced-motion',mq('(prefers-reduced-motion: reduce)')?'reduce — suppress all animation':'no-preference',1.0,'accessibility instruction, must be obeyed');
+row(pf,'g','prefers-contrast',mq('(prefers-contrast: more)')?'more':mq('(prefers-contrast: less)')?'less':'no-preference',0.8);
+row(pf,'g','prefers-reduced-transparency',mq('(prefers-reduced-transparency: reduce)')?'reduce':'no-preference',0.5);
+row(pf,'g','prefers-reduced-data',mq('(prefers-reduced-data: reduce)')?'reduce':'no-preference',0.5);
+row(pf,'g','forced-colors',mq('(forced-colors: active)')?'active — OS high contrast':'none',0.8);
+row(pf,'g','inverted-colors',mq('(inverted-colors: inverted)')?'inverted':'none',0.3);
+row(pf,'g','pointer (primary)',mq('(pointer: coarse)')?'coarse — touch':mq('(pointer: fine)')?'fine — mouse/stylus':'none',1.0);
+row(pf,'g','any-hover',mq('(any-hover: hover)')?'hover available':'no hover',0.5,'decides whether hover-reveal UI is usable at all');
+row(pf,'g','display-mode',mq('(display-mode: standalone)')?'standalone — installed PWA':'browser',1.0);
+row(pf,'g','dynamic-range',mq('(dynamic-range: high)')?'high — HDR':'standard',0.5);
+row(pf,'g','update frequency',mq('(update: slow)')?'slow — e-ink':'fast',0.3);
+row(pf,'g','scripting',mq('(scripting: enabled)')?'enabled':'limited',0.2);
+
+// ---- Layer 4: capability + permission -------------------------------------
+const cap = $('t-cap');
+row(cap,'g','navigator.cookieEnabled',navigator.cookieEnabled,0.3);
+row(cap,'g','navigator.webdriver',navigator.webdriver?'true — automation detected':'false',1.0,'bot signal, keeps synthetic traffic out of training');
+row(cap,'g','navigator.pdfViewerEnabled',navigator.pdfViewerEnabled,0.5,'decides inline PDF vs download');
+row(cap,'g','AVIF / WebP support','probed via canvas.toDataURL',0.5);
+row(cap,'g','WebGPU available',('gpu' in navigator)?'yes':'no',1.0,'gates on-device model inference');
+row(cap,'g','Service Worker support',('serviceWorker' in navigator)?'yes':'no',0.2,'gates offline personalization');
+row(cap,'a','storage.estimate() quota','requires storage access',1.0);
+row(cap,'a','localStorage / IndexedDB','device storage — Art. 5(3) applies',0,'consent unless strictly necessary');
+const permRows=[['geolocation'],['notifications'],['camera'],['microphone'],['clipboard-read']];
+permRows.forEach(([p])=>row(cap,'g',`permissions.query("${p}")`,'querying…',0.5,'readable without prompting'));
+(async()=>{
+  const cells=[...cap.querySelectorAll('tr')].filter(tr=>tr.textContent.includes('permissions.query'));
+  for (let i=0;i<permRows.length;i++){
+    let state='not supported';
+    try{ state=(await navigator.permissions.query({name:permRows[i][0]})).state; }catch{}
+    const v=cells[i]?.querySelector('.v'); if(v){v.textContent=state; v.classList.remove('null');}
+  }
+})();
+
+// ---- Layer 5: network -----------------------------------------------------
+const net = $('t-net');
+const c = navigator.connection;
+row(net,'g','connection.effectiveType',c?.effectiveType,1.5,'drives the prefetch decision');
+row(net,'g','connection.downlink',c?.downlink?c.downlink+' Mb/s':null,1.5);
+row(net,'g','connection.rtt',c?.rtt?c.rtt+' ms':null,1.5);
+row(net,'g','navigator.onLine',navigator.onLine,0.1);
+const nav0 = performance.getEntriesByType('navigation')[0];
+row(net,'g','navigation type',nav0?.type,0.5,'reload and back_forward mean very different intent');
+row(net,'g','TTFB',nav0?Math.round(nav0.responseStart)+' ms':null,0,'measured, not declared');
+row(net,'g','DNS + TCP + TLS',nav0?`${Math.round(nav0.domainLookupEnd-nav0.domainLookupStart)} + ${Math.round(nav0.connectEnd-nav0.connectStart)} + ${Math.round(nav0.requestStart-nav0.secureConnectionStart||0)} ms`:null,0);
+row(net,'g','deviceMemory × cores × RTT','composite device-class estimate',0,'derived, no new collection');
+
+// ---- What cannot be known -------------------------------------------------
+const cant = $('t-cant');
+[['Your name, email, or any identity','Not obtainable. Nothing on this page is tied to a person.'],
+ ['Precise GPS location','Permission-gated. IP gives city granularity at best.'],
+ ['Which other sites you visited',':visited history leak is closed, and Chrome 136+ partitions it entirely.'],
+ ['Your other tabs or their content','No API exposes this.'],
+ ['Third-party cookies','Blocked by default in Safari and Firefox; unreliable in Chrome.'],
+ ['Cross-session identity without storage','Only via fingerprinting, which needs consent under GDPR/PDPL and is actively degraded by browsers.'],
+ ['Battery level','Removed or restricted in most browsers after abuse.'],
+ ['Local IP via WebRTC','Mitigated by mDNS obfuscation.'],
+ ['Clipboard contents','Permission-gated; paste events only tell you that a paste happened.'],
+ ['Accelerometer / gyroscope','Permission-gated on iOS, and irrelevant to service intent.'],
+ ['Exact device model on iOS','Deliberately not exposed. All iPhones look alike.'],
+ ['Installed fonts (reliably)','Safari ships a fixed list; Chrome is tightening.']
+].forEach(([a,b])=>row(cant,'r',a,b,0));
+
+// ---- entropy meter --------------------------------------------------------
+function paintEntropy(){
+  $('ent').innerHTML = totalBits.toFixed(1)+' <span style="font-size:14px;color:var(--dim)">bits</span>';
+  const p = Math.min(100,(totalBits/33)*100);
+  $('entbar').style.width = p+'%';
+  $('entnote').innerHTML = (totalBits>=33
+    ? `<b style="color:var(--bad)">Above the ~33-bit uniqueness threshold.</b> Every attribute counted here is individually harmless and legitimately collectable, and together they are still identifying. That is the entire argument for bucketing at the collector and never storing the tuple.`
+    : `~33 bits uniquely identifies one person on Earth.`)
+    + `<br><br>Counts only the green and amber rows. A further <b style="color:var(--bad)">${fpBits.toFixed(1)} bits</b> sits in the fingerprinting-grade rows, deliberately excluded: those are the ones this architecture refuses to take.`;
+}
+paintEntropy();
+
+// ---- behavioural layer ----------------------------------------------------
+let pts=[], hes=0, peak=0, lastDir=null, ptype='–';
+addEventListener('pointermove', e=>{
+  ptype = e.pointerType;
+  const now=performance.now();
+  const last=pts[pts.length-1];
+  if(last){
+    const dt=now-last.t; if(dt<8) return;
+    const dx=e.clientX-last.x, dy=e.clientY-last.y;
+    const v=Math.hypot(dx,dy)/dt; if(v>peak) peak=v;
+    const dir=Math.atan2(dy,dx);
+    if(lastDir!==null && Math.abs(dir-lastDir)>2.2) hes++;
+    lastDir=dir;
+  }
+  pts.push({x:e.clientX,y:e.clientY,t:now});
+  if(pts.length>400) pts.shift();
+  $('p-n').textContent=pts.length;
+  $('p-hes').textContent=hes;
+  $('p-vel').textContent=peak.toFixed(2)+' px/ms';
+  $('p-type').textContent=ptype;
+  if(pts.length>8){
+    let path=0;
+    for(let i=1;i<pts.length;i++) path+=Math.hypot(pts[i].x-pts[i-1].x,pts[i].y-pts[i-1].y);
+    const straight=Math.hypot(pts.at(-1).x-pts[0].x,pts.at(-1).y-pts[0].y);
+    $('p-dir').textContent=path>0?(straight/path).toFixed(3):'–';
+    const angs=[];
+    for(let i=1;i<pts.length;i++) angs.push(Math.atan2(pts[i].y-pts[i-1].y,pts[i].x-pts[i-1].x));
+    const bins=new Array(8).fill(0);
+    angs.forEach(a=>bins[Math.floor(((a+Math.PI)/(2*Math.PI))*8)%8]++);
+    const tot=angs.length; let H=0;
+    bins.forEach(b=>{if(b){const p=b/tot;H-=p*Math.log2(p);}});
+    $('p-ent').textContent=H.toFixed(2)+' bits';
+  }
+}, {passive:true});
+
+let maxDepth=0, sVels=[], sRev=0, lastY=scrollY, lastSDir=0, lastST=performance.now();
+addEventListener('scroll', ()=>{
+  const now=performance.now(), y=scrollY;
+  const max=Math.max(1,document.body.scrollHeight-innerHeight);
+  maxDepth=Math.max(maxDepth,y/max);
+  const dt=now-lastST;
+  if(dt>0){
+    const v=Math.abs(y-lastY)/dt; sVels.push(v); if(sVels.length>60) sVels.shift();
+    const dir=Math.sign(y-lastY);
+    if(dir!==0 && lastSDir!==0 && dir!==lastSDir) sRev++;
+    if(dir!==0) lastSDir=dir;
+  }
+  lastY=y; lastST=now;
+  const mean=sVels.length?sVels.reduce((a,b)=>a+b,0)/sVels.length:0;
+  $('s-depth').textContent=(maxDepth*100).toFixed(0)+'%';
+  $('s-vel').textContent=mean.toFixed(3)+' px/ms';
+  $('s-rev').textContent=sRev;
+  $('s-mode').textContent = mean>1.2 ? 'scanning' : mean>0.25 ? 'skimming' : 'reading';
+}, {passive:true});
+
+let visStart=Date.now(), blurs=0;
+setInterval(()=>{ if(!document.hidden) $('s-vis').textContent=Math.round((Date.now()-visStart)/1000)+'s'; },1000);
+addEventListener('blur',()=>{blurs++;$('s-blur').textContent=blurs;});
+document.addEventListener('visibilitychange',()=>{if(document.hidden){blurs++;$('s-blur').textContent=blurs;}});
+
+let keys=0, backs=0, pastes=0, lastK=0, flights=[];
+$('probe').addEventListener('keydown', e=>{
+  keys++; const now=performance.now();
+  if(lastK) flights.push(now-lastK);
+  lastK=now;
+  if(e.key==='Backspace') backs++;
+  $('k-n').textContent=keys; $('k-back').textContent=backs;
+  if(flights.length) $('k-flight').textContent=Math.round(flights.reduce((a,b)=>a+b,0)/flights.length)+' ms';
+});
+$('probe').addEventListener('paste',()=>{pastes++;$('k-paste').textContent=pastes;});
+
+let clickLog=[], rage=0, dead=0, copies=0;
+addEventListener('click', e=>{
+  const now=performance.now();
+  clickLog=clickLog.filter(c=>now-c.t<1000);
+  clickLog.push({t:now,x:e.clientX,y:e.clientY});
+  if(clickLog.length>=3){ rage++; $('f-rage').textContent=rage; clickLog=[]; }
+  if(!e.target.closest('a,button,input,select,textarea,[role=button]')){ dead++; $('f-dead').textContent=dead; }
+});
+document.addEventListener('copy',()=>{copies++;$('f-copy').textContent=copies;});
+addEventListener('mouseout', e=>{ if(!e.relatedTarget && e.clientY<10){ $('f-exit').textContent='detected'; } });
+
+// ---- temporal ladder: what becomes knowable as events accumulate ----------
+const STAGES = [
+  [0,  'T0', 'Headers only. Locale, device, network and accessibility preferences are known. Intent is not.'],
+  [1,  'T1', 'Entry velocity and whether they engaged at all. Still no intent.'],
+  [3,  'T2', 'Reading mode separable from scanning. First section of genuine attention identifiable.'],
+  [6,  'T3', 'Topic interest from dwell distribution. Search intent from a partial query. Hesitation readable from pointer path.'],
+  [10, 'T4', 'Task versus browse distinction. Comparison behaviour visible. Early struggle indicators present.'],
+  [20, 'T5', 'Frustration reliably classifiable. This is the stage where intervention has evidence behind it.'],
+  [30, 'T6', 'Abandonment risk and whether intervention would help at all, rather than merely what to offer.'],
+];
+let evCount = -1; // bumpStage() is called once below to paint the T0 state
+function bumpStage(){
+  evCount++;
+  let s = STAGES[0];
+  for (const st of STAGES) if (evCount >= st[0]) s = st;
+  $('t-n').textContent = evCount;
+  $('t-stage').textContent = s[1];
+  $('t-know').textContent = s[2];
+  $('t-bar').style.width = Math.min(100, (evCount/30)*100) + '%';
+}
+// Scroll is throttled to one countable event per 400ms, otherwise a single flick
+// would jump the session to T5 and the ladder would be meaningless.
+let lastScrollCount = 0;
+['pointerdown', 'keydown', 'copy', 'click'].forEach((t) =>
+  addEventListener(t, () => bumpStage(), { passive: true })
+);
+addEventListener('scroll', () => {
+  const now = performance.now();
+  if (now - lastScrollCount > 400) { lastScrollCount = now; bumpStage(); }
+}, { passive: true });
+bumpStage(); // paint T0
+
+// Thrashed cursor: rapid erratic movement without acquiring a target.
+let thrash = 0, recentDirs = [];
+addEventListener('pointermove', e => {
+  if (pts.length < 3) return;
+  const a = pts.at(-1), b = pts.at(-2), cc = pts.at(-3);
+  const d1 = Math.atan2(a.y-b.y, a.x-b.x), d2 = Math.atan2(b.y-cc.y, b.x-cc.x);
+  recentDirs.push(Math.abs(d1-d2)); if (recentDirs.length > 25) recentDirs.shift();
+  const reversals = recentDirs.filter(d => d > 2.0).length;
+  if (reversals >= 8 && !e.target.closest('a,button,input')) {
+    thrash++; recentDirs = []; $('f-thrash').textContent = thrash;
+  }
+}, {passive:true});
+
+// Combined state. A single event is noise; vendors require a combined threshold.
+setInterval(()=>{
+  const meanV = sVels.length ? sVels.reduce((a,b)=>a+b,0)/sVels.length : 0;
+  let state = 'scanning';
+  if (rage >= 2 || (rage >= 1 && dead >= 1)) state = 'frustrated';
+  else if (thrash >= 2 || dead >= 2) state = 'confused';
+  else if (keys > 3) state = 'searching';
+  else if (copies >= 1) state = 'comparing';
+  else if (meanV > 0 && meanV < 0.25) state = 'reading';
+  const el = $('f-state');
+  el.textContent = state;
+  el.style.color = state==='frustrated' ? 'var(--bad)' : state==='confused' ? 'var(--warn)' : 'var(--ink)';
+}, 700);
+
+// ---- derived rendering policy: rules, not a model -------------------------
+(function policy(){
+  const et=c?.effectiveType, save=c?.saveData, mem=navigator.deviceMemory??4, cores=navigator.hardwareConcurrency??4;
+  const fast = (et==='4g'||!et) && !save;
+  const weak = mem<=2 || cores<=2;
+  $('d-pre').textContent = save ? 'none (Save-Data)' : fast ? 'prerender top-1, prefetch top-2' : 'prefetch only';
+  $('d-mot').textContent = mq('(prefers-reduced-motion: reduce)') ? 'disabled (user preference)' : weak ? 'opacity only' : 'full';
+  $('d-img').textContent = save ? 'low' : devicePixelRatio>=2 && fast ? '2x AVIF' : '1x';
+  $('d-js').textContent = weak ? '≤ 80 KB' : fast ? '≤ 200 KB' : '≤ 120 KB';
+})();
+</script>
+</body>
+</html>
