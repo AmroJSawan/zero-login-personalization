@@ -88,6 +88,78 @@ body.frozen .tag{display:none!important}
 footer{border-top:1px solid var(--line);padding:24px 28px 60px;color:var(--dim);font-size:12.5px}
 footer .max{max-width:880px;margin:0 auto}
 
+/* ---------- purchase journey ---------- */
+body.journey .head,body.journey #list,body.journey #cmp,body.journey .about,body.journey footer{display:none}
+#journey{max-width:760px;margin:0 auto;padding:22px 24px 60px;position:relative}
+.totalchip{position:sticky;top:12px;margin:0 0 10px auto;width:max-content;background:#101b17;
+  color:#e8ede9;border-radius:12px;padding:8px 14px;font:12.5px var(--mono);z-index:5}
+.prog{display:flex;align-items:center;margin:0 0 26px}
+.pstep{display:flex;align-items:center;gap:8px;font:11px var(--mono);color:var(--faint);white-space:nowrap}
+.pstep i{width:22px;height:22px;border-radius:50%;border:1.5px solid var(--line);background:var(--card);
+  display:grid;place-items:center;font-size:11px;font-style:normal;color:var(--dim);
+  transition:background .4s,border-color .4s,color .4s}
+.pstep.now{color:var(--ink)}.pstep.now i,.pstep.done i{border-color:var(--acc);color:var(--acc)}
+.pstep.done i{background:var(--acc);color:#fff}
+.pbar{flex:1;height:2px;background:var(--line);margin:0 10px;position:relative;overflow:hidden;min-width:18px}
+.pbar i{position:absolute;inset:0;background:var(--acc);transform:scaleX(0);transform-origin:left;
+  transition:transform .6s ease}
+.pbar.fill i{transform:scaleX(1)}
+.stage{display:none}
+.stage.on{display:block;animation:rise .45s ease}
+@keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.stage h2{font-size:22px;margin:0 0 4px;letter-spacing:-.01em}
+.stage p.mut{color:var(--dim);font-size:13.5px;margin:0 0 18px}
+.offer{border:1.5px solid var(--gold);background:#c19a3f0d;border-radius:14px;padding:18px;margin:12px 0}
+.offer b{display:block;margin-bottom:3px}
+.offer small{color:var(--dim);display:block}
+.orow{display:flex;gap:10px;margin-top:13px;flex-wrap:wrap}
+.obtn{background:var(--acc);color:#fff;border:0;border-radius:10px;padding:10px 18px;font-weight:600;font-size:14px}
+.obtn.ghost{background:none;color:var(--acc);border:1.5px solid var(--acc)}
+.upsellwall{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;margin:14px 0}
+.hcardU{background:var(--card);border:1.5px solid var(--line);border-radius:12px;padding:14px}
+.hcardU b{font-size:13.5px}.hcardU small{color:var(--dim);font-size:12px;display:block;margin:2px 0 8px}
+.hcardU button{border:1.5px solid var(--line);background:none;border-radius:8px;padding:6px 12px;
+  font-size:12.5px;color:var(--dim)}
+#exWall{display:none}
+body.frozen .adaptiveOnly{display:none}
+body.frozen #exWall{display:grid!important}
+.field{margin:0 0 15px;max-width:420px}
+.field label{display:block;font:11px var(--mono);letter-spacing:.08em;text-transform:uppercase;
+  color:var(--dim);margin-bottom:6px}
+.field input{width:100%;font:15px var(--sans);padding:12px 14px;border:1.5px solid var(--line);
+  border-radius:10px;background:var(--card);color:var(--ink);outline:none}
+.field input:focus{border-color:var(--acc)}
+.helper{display:grid;grid-template-rows:0fr;transition:grid-template-rows .45s}
+.helper.on{grid-template-rows:1fr}
+.helper>div{overflow:hidden}
+.helper p{margin:6px 0 0;font-size:12px;color:var(--acc)}
+.paybox{border:1.5px solid var(--line);border-radius:14px;background:var(--card);padding:18px;max-width:440px}
+.payline{display:flex;justify-content:space-between;gap:12px;font-size:13.5px;padding:5px 0;color:var(--dim)}
+.payline.total{border-top:1px solid var(--line);margin-top:6px;padding-top:11px;color:var(--ink);
+  font-weight:600;font-size:16px}
+.shield{font-size:12px;color:var(--acc);margin:12px 0 0}
+.paybtn{width:100%;margin-top:14px;background:var(--acc);color:#fff;border:0;border-radius:11px;
+  padding:14px;font-weight:600;font-size:15px;transition:opacity .3s}
+.stagenav{margin-top:22px;display:flex;gap:18px;align-items:center}
+.back{background:none;border:0;color:var(--dim);font-size:13px;text-decoration:underline;padding:0}
+.next{background:var(--acc);color:#fff;border:0;border-radius:10px;padding:11px 22px;font-weight:600;font-size:14px}
+.check{width:54px;height:54px;margin:4px 0 12px}
+.check circle,.check path{fill:none;stroke:var(--acc);stroke-width:2.5;stroke-linecap:round;
+  stroke-dasharray:200;stroke-dashoffset:200;animation:draw 1s ease forwards}
+.check path{stroke-dasharray:60;stroke-dashoffset:60;animation-delay:.5s}
+@keyframes draw{to{stroke-dashoffset:0}}
+.pass{background:#101b17;color:#e8ede9;border-radius:18px;padding:22px;margin-top:6px;max-width:440px;
+  animation:passrise .7s ease .3s both;box-shadow:0 18px 44px #101b1726}
+@keyframes passrise{from{opacity:0;transform:translateY(22px) scale(.98)}to{opacity:1;transform:none}}
+.pass .mk{font-weight:600;letter-spacing:.3em;font-size:11px;color:var(--gold);margin-bottom:14px}
+.pass .big{display:flex;justify-content:space-between;align-items:baseline;font-size:26px;font-weight:600}
+.pass .big small{font:11px var(--mono);color:#7f8d86}
+.arc{width:100%;height:44px;margin:6px 0}
+.arc path{fill:none;stroke:var(--gold);stroke-width:1.6;stroke-dasharray:340;stroke-dashoffset:340;
+  animation:draw 1.4s ease .8s forwards}
+.pgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;font:12px var(--mono);color:#9fada6;margin-top:12px}
+.pgrid b{display:block;color:#e8ede9;font-size:14px;font-style:normal}
+
 /* ---------- pill + drawer ---------- */
 #pill{position:fixed;right:20px;bottom:20px;z-index:60;display:flex;align-items:center;gap:9px;
   background:#101b17;color:#e8ede9;border:1px solid #2d3b34;border-radius:26px;padding:11px 17px;
@@ -154,6 +226,81 @@ footer .max{max-width:880px;margin:0 auto}
   and evaporate when you close it.
 </div></footer>
 
+<div id="journey" hidden>
+  <div class="totalchip">total <span class="num">€<span id="tot1">0</span></span></div>
+  <div class="prog">
+    <div class="pstep done"><i>✓</i>Fare</div><div class="pbar" id="pb1"><i></i></div>
+    <div class="pstep" id="ps2"><i>2</i>Extras</div><div class="pbar" id="pb2"><i></i></div>
+    <div class="pstep" id="ps3"><i>3</i>Traveller</div><div class="pbar" id="pb3"><i></i></div>
+    <div class="pstep" id="ps4"><i>4</i>Pay</div>
+  </div>
+
+  <section class="stage" id="st1">
+    <h2>Extras</h2>
+    <p class="mut" id="exSub"></p>
+    <div id="exAdaptive" class="adaptiveOnly"></div>
+    <div class="upsellwall" id="exWall">
+      <div class="hcardU"><b>Checked bag</b><small>23 kg hold luggage</small><button>Add €38</button></div>
+      <div class="hcardU"><b>Seat selection</b><small>Pick any standard seat</small><button>Add €12</button></div>
+      <div class="hcardU"><b>Priority boarding</b><small>Board first</small><button>Add €9</button></div>
+      <div class="hcardU"><b>Flexibility bundle</b><small>Free date changes</small><button>Add €24</button></div>
+    </div>
+    <p class="adaptiveOnly"><button class="back" id="exMore">see everything else anyway</button></p>
+    <div class="stagenav"><button class="back" id="backFares">← back to fares</button>
+      <button class="next" data-next="2">Continue</button></div>
+  </section>
+
+  <section class="stage" id="st2">
+    <h2>Who's flying</h2>
+    <p class="mut">Goes nowhere — this page has no network.
+      <button class="back" id="demoFill">use the demo traveller</button></p>
+    <div class="field"><label for="fn">First name</label><input id="fn" autocomplete="off">
+      <div class="helper" id="h-fn"><div><p>Exactly as on the passport — though it's a demo, anything works.</p></div></div></div>
+    <div class="field"><label for="ln">Last name</label><input id="ln" autocomplete="off"></div>
+    <div class="field"><label for="em">Email</label><input id="em" autocomplete="off">
+      <div class="helper" id="h-em"><div><p>Only the ticket goes here. No newsletter, no account, nothing else.</p></div></div></div>
+    <div class="stagenav"><button class="back" data-back="1">← extras</button>
+      <button class="next" data-next="3">Continue</button></div>
+  </section>
+
+  <section class="stage" id="st3">
+    <h2>Pay</h2>
+    <p class="mut">The total below is the total. Nothing was added along the way without you.</p>
+    <div class="paybox">
+      <div class="payline"><span id="payFare"></span><span class="num" id="payFareAmt"></span></div>
+      <div class="payline" id="payBagLine" style="display:none"><span>Checked bag 23 kg</span><span class="num">€38</span></div>
+      <div class="payline"><span>Taxes &amp; fees</span><span>included</span></div>
+      <div class="payline" id="payPolicy" style="display:none"><span>Change policy</span><span>€45 to T-2h</span></div>
+      <div class="payline total"><span>Total</span><span class="num">€<span id="tot2">0</span></span></div>
+      <p class="shield">Price locked for <span class="num" id="lockT">10:00</span> — it cannot rise while you decide.</p>
+      <div class="payline" style="margin-top:10px"><span>Demo card on file</span><span class="num">•••• 4242</span></div>
+      <div class="helper" id="h-pay"><div><p>Taking your time is fine. The total is final, and cancellation is free for 24 hours.</p></div></div>
+      <button class="paybtn" id="payBtn">Pay €<span id="tot3">0</span></button>
+    </div>
+    <div class="stagenav"><button class="back" data-back="2">← traveller</button></div>
+  </section>
+
+  <section class="stage" id="st4">
+    <svg class="check" viewBox="0 0 54 54" aria-hidden="true"><circle cx="27" cy="27" r="24"/><path d="M16 28 l8 8 l15 -17"/></svg>
+    <h2>You're booked.</h2>
+    <p class="mut" id="cfSub"></p>
+    <div class="pass">
+      <div class="mk">MERIDIAN ✳ BOARDING PASS · DEMO</div>
+      <div class="big"><span>GVA</span><small id="passFlight"></small><span>LIS</span></div>
+      <svg class="arc" viewBox="0 0 300 44" preserveAspectRatio="none"><path d="M4 40 Q150 -18 296 40"/></svg>
+      <div class="pgrid">
+        <div>Passenger<b id="passName"></b></div>
+        <div>Date<b>Thu 21 May</b></div>
+        <div>Departs<b class="num" id="passDep"></b></div>
+        <div>Seat<b class="num" id="passSeat"></b></div>
+        <div>Gate<b class="num">B14</b></div>
+        <div>Fare<b id="passFare"></b></div>
+      </div>
+    </div>
+    <div class="stagenav"><button class="back" id="again">start over</button></div>
+  </section>
+</div>
+
 <button id="pill" aria-expanded="false" aria-controls="brain"><i></i><span id="pillText">reading the room — quietly</span></button>
 
 <aside id="brain" role="region" aria-label="adaptation machinery">
@@ -176,8 +323,14 @@ footer .max{max-width:880px;margin:0 auto}
     <button data-sim="hesitator">… the hesitator</button>
     <button data-sim="returner">↩ the returner</button>
     <button data-sim="hunter">⌄ the hunter</button>
+    <button data-sim="journey">⟶ the full journey</button>
   </div>
   <button id="resetB">↺ reset session</button>
+  <hr>
+  <h3>What this checkout refuses to do</h3>
+  <p class="note">No countdown pressure · no pre-ticked boxes · no "3 people are looking" · no fee
+  ambush at the end · declining is one click · the price lock protects you, not us. Freeze the
+  adaptation and the extras step becomes the usual upsell wall — that contrast is the argument.</p>
   <hr>
   <p class="note">This demo reads a mouse or trackpad; on touch it stays politely default.</p>
 </aside>
@@ -254,8 +407,7 @@ $$('.sel').forEach(b=>{
     if(performance.now()-t0>350){const s=St[i];s.ctaMiss++;
       if(s.ctaMiss>=2&&!s.assured){s.assured=true;cards[i].classList.add('assure');
         feed(`<b>${name(i)}</b>: hesitation noticed — answered it under the button`);}}});
-  b.addEventListener('click',e=>{e.preventDefault();
-    feed(`<b>${name(i)}</b>: selected — this is where booking would start`);});
+  b.addEventListener('click',e=>{e.preventDefault();startJourney(i);});
 });
 
 /* gravity + approach prediction from raw pointer motion */
@@ -434,6 +586,15 @@ const SIMS={
  hunter:async()=>{await gGo(1);await wait(800);
    window.scrollTo({top:document.body.scrollHeight,behavior:RM?'auto':'smooth'});await wait(1300);
    window.scrollTo({top:0,behavior:RM?'auto':'smooth'});await wait(1200);},
+ journey:async()=>{
+   // compare Light vs Flex on the 09:10, pick Light → the journey should offer just the bag
+   await gGo(2);await wait(800);await gGo(3);await wait(800);await gGo(2);await wait(650);
+   await gClickEl(cards[2].querySelector('.sel'));await wait(900);
+   const ab=$('#addBag');if(ab)await gClickEl(ab);await wait(700);
+   await gClickEl($('#demoFill'));await wait(700);
+   await gClickEl($('#st2 .next'));await wait(RM?2200:6600);   // linger: the pay-idle reassurance appears
+   await gClickEl($('#payBtn'));await wait(2400);
+ },
 };
 let simRunning=false;
 $$('[data-sim]').forEach(b=>b.addEventListener('click',async()=>{
@@ -445,6 +606,154 @@ $$('[data-sim]').forEach(b=>b.addEventListener('click',async()=>{
     $$('[data-sim]').forEach(x=>x.disabled=false);simRunning=false;}
 }));
 renderBars();
+
+/* ================= the purchase journey ================= */
+/* What was learned on the results page decides what the journey does NOT ask. */
+let J=null,lockInt=null,payIdleT=null;
+
+function startJourney(i){
+  const totalHov=St.reduce((a,s)=>a+s.hov+s.ret,0);
+  const miss=St.reduce((a,s)=>a+s.ctaMiss,0);
+  const sib=i%2===0?i+1:i-1;
+  J={fare:i,sib,added:false,paid:false,total:FARES[i].pr,totalShown:undefined,
+     light:FARES[i].bag===0,
+     baggageGap:FARES[i].bag===0&&(St[sib].hov>0||St[sib].ret>0||(cmpPair||'').split('-').includes(String(sib))),
+     priceSensitive:miss>=1||FARES[i].bag===0,
+     detailReader:St.some(s=>s.ret>=2)||cards[i].classList.contains('open'),
+     decisive:totalHov<=2&&miss===0};
+  document.body.classList.add('journey');
+  $('#journey').hidden=false;
+  feed(`<b>${name(i)}</b> selected — carrying what it learned into the journey`);
+  buildExtras();setTotal(FARES[i].pr);goStage(1);
+  if(!lockInt){let s=600;lockInt=setInterval(()=>{s--;
+    if(s<0){s=600;feed('price re-locked quietly — no countdown pressure here');}
+    const el=$('#lockT');if(el)el.textContent=`${Math.floor(s/60)}:${String(s%60).padStart(2,'0')}`;},1000);}
+  $('#pillText').textContent='guiding — watch the choices it makes';
+}
+
+function buildExtras(){
+  const diff=Math.abs(FARES[J.sib].pr-FARES[J.fare].pr);
+  let html;
+  if(J.baggageGap){
+    html=`<div class="offer"><b>The bag, without the bundle</b>
+      <small>You weighed ${name(J.sib)} — most of that €${diff} jump is the checked bag. Just the bag is €38.</small>
+      <div class="orow"><button class="obtn" id="addBag">Add the bag · €38</button>
+      <button class="obtn ghost" id="skipBag">No thanks — travelling light</button></div></div>`;
+    $('#exSub').textContent='One question, not a menu — built from what you compared.';
+    feed('extras reduced to <b>one relevant offer</b> — you compared for the bag');
+  }else if(!J.light){
+    html=`<div class="offer"><b>Nothing to sell you</b>
+      <small>Bag, free changes and seat choice are already inside your Flex fare.</small>
+      <div class="orow"><button class="obtn ghost" id="skipBag">Continue</button></div></div>`;
+    $('#exSub').textContent='Flex covers it. No upsell wall.';
+    feed('extras skipped — <b>Flex already includes everything</b>');
+  }else{
+    html=`<div class="offer"><b>Travelling light, confirmed</b>
+      <small>No add-ons pushed. A 23 kg bag is €38 any time before the gate, if plans change.</small>
+      <div class="orow"><button class="obtn ghost" id="skipBag">Continue light</button></div></div>`;
+    $('#exSub').textContent='You never looked at bags, so we are not asking twice.';
+    feed('no bag interest observed — <b>upsell suppressed</b>');
+  }
+  if(J.decisive)$('#exSub').textContent+=' You moved fast, so this stays short.';
+  $('#exAdaptive').innerHTML=html;
+  const ab=$('#addBag');
+  if(ab)ab.addEventListener('click',()=>{J.added=true;setTotal(FARES[J.fare].pr+38);
+    feed(`bag added — total updated <b>in view</b>, €${FARES[J.fare].pr+38}`);goStage(2);});
+  const sb=$('#skipBag');if(sb)sb.addEventListener('click',()=>goStage(2));
+}
+
+function setTotal(v){
+  const from=J.totalShown===undefined?v:J.totalShown;
+  J.total=v;J.totalShown=v;
+  ['tot1','tot2','tot3'].forEach(id=>{const el=$('#'+id);if(!el)return;
+    if(RM||from===v){el.textContent=v;return;}
+    const t0=performance.now();
+    (function tw(){const p=Math.min(1,(performance.now()-t0)/450);
+      el.textContent=Math.round(from+(v-from)*p);if(p<1)setTimeout(tw,30);})();});
+}
+
+function goStage(n){
+  [1,2,3,4].forEach(k=>$('#st'+k).classList.toggle('on',k===n));
+  [['#ps2',1],['#ps3',2],['#ps4',3]].forEach(([sel,idx])=>{const el=$(sel);
+    el.classList.toggle('now',n===idx);el.classList.toggle('done',n>idx);
+    if(n>idx)el.querySelector('i').textContent='✓';});
+  $('#pb1').classList.toggle('fill',n>=1);
+  $('#pb2').classList.toggle('fill',n>=2);
+  $('#pb3').classList.toggle('fill',n>=3);
+  if(n===3)armPay();
+  if(n===4)renderPass();
+  window.scrollTo({top:0,behavior:RM?'auto':'smooth'});
+}
+
+function armPay(){
+  $('#payFare').textContent=`Fare · ${name(J.fare)} GVA→LIS`;
+  $('#payFareAmt').textContent='€'+FARES[J.fare].pr;
+  $('#payBagLine').style.display=J.added?'':'none';
+  $('#payPolicy').style.display=(J.detailReader&&J.light)?'':'none';
+  if(J.detailReader&&J.light)feed('you read fine print earlier — <b>change policy shown upfront</b>');
+  if(J.priceSensitive)feed('price sensitivity noted — <b>lock and total emphasised</b>, nothing added silently');
+  setTotal(J.total);
+  clearTimeout(payIdleT);
+  payIdleT=setTimeout(()=>{
+    if(J&&!J.paid&&$('#st3').classList.contains('on')&&!frozen){
+      $('#h-pay').classList.add('on');feed('pausing at payment — <b>reassured, not pressured</b>');}
+  },RM?1800:6000);
+}
+
+$('#payBtn').addEventListener('click',()=>{
+  if(!J||J.paid)return;J.paid=true;
+  if(!$('#fn').value)$('#fn').value='Nadia';
+  if(!$('#ln').value)$('#ln').value='Kovač';
+  const b=$('#payBtn');b.textContent='Processing…';b.style.opacity=.7;
+  setTimeout(()=>{b.textContent='Paid';feed('<b>paid</b> — the confirmation is the reward, peak-end on purpose');
+    goStage(4);},RM?200:900);
+});
+
+function renderPass(){
+  $('#passName').textContent=(($('#fn').value||'Nadia')+' '+($('#ln').value||'Kovač')).trim();
+  $('#passFlight').textContent='MR 217 · direct';
+  $('#passDep').textContent=FARES[J.fare].t;
+  $('#passSeat').textContent=J.fare%2?'7A · window':'14C · aisle';
+  $('#passFare').textContent=FARES[J.fare].fam+(J.added?' + bag':'');
+  $('#cfSub').textContent=`Ticket sent to ${$('#em').value||'the demo inbox'} — and this whole journey never left your tab.`;
+}
+
+/* field-level behaviour: hesitation gets help, typing gets silence */
+[['fn','h-fn'],['em','h-em']].forEach(([f,h])=>{
+  const inp=$('#'+f);let t;
+  inp.addEventListener('focus',()=>{t=setTimeout(()=>{
+    if(!inp.value&&!frozen){$('#'+h).classList.add('on');
+      feed(`hesitation on <b>${f==='fn'?'the name field':'the email field'}</b> — helper shown inline`);}},2500);});
+  inp.addEventListener('input',()=>{clearTimeout(t);$('#'+h).classList.remove('on');});
+  inp.addEventListener('blur',()=>clearTimeout(t));
+});
+$('#demoFill').addEventListener('click',()=>{
+  $('#fn').value='Nadia';$('#ln').value='Kovač';$('#em').value='nadia@demo.dev';
+  feed('demo traveller filled — <b>zero typing required</b>');});
+$('#exMore').addEventListener('click',()=>{const w=$('#exWall');
+  const on=w.style.display==='grid';w.style.display=on?'none':'grid';
+  if(!on)feed('full add-on list opened <b>on request</b> — that is the difference');});
+
+$$('#journey .next').forEach(b=>b.addEventListener('click',()=>goStage(+b.dataset.next)));
+$$('#journey [data-back]').forEach(b=>b.addEventListener('click',()=>goStage(+b.dataset.back)));
+$('#backFares').addEventListener('click',exitJourney);
+$('#again').addEventListener('click',()=>{exitJourney();reset();
+  ['fn','ln','em'].forEach(f=>$('#'+f).value='');
+  const b=$('#payBtn');b.style.opacity=1;});
+function exitJourney(){
+  document.body.classList.remove('journey');$('#journey').hidden=true;
+  if(J)J.paid=false;
+  feed('back to fares — nothing lost, nothing punished');
+}
+
+/* generic ghost helpers for journey elements */
+async function gToEl(el,ms=520){
+  if(!el)return null;
+  el.scrollIntoView({behavior:RM?'auto':'smooth',block:'center'});await wait(420);
+  const r=el.getBoundingClientRect();
+  await glide(r.left+r.width/2,r.top+r.height/2,ms);return el;
+}
+async function gClickEl(el){el=await gToEl(el);if(!el)return;el.click();await wait(400);}
 </script>
 </body>
 </html>
