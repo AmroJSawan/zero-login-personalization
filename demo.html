@@ -371,8 +371,10 @@ const LOC=(()=>{
   const R2C={AE:'AED',SA:'SAR',QA:'QAR',GB:'GBP',US:'USD',CH:'CHF',JP:'JPY'};
   const T2C=[['Asia/Dubai','AED'],['Asia/Riyadh','SAR'],['Asia/Qatar','QAR'],['Europe/London','GBP'],
              ['Europe/Zurich','CHF'],['Europe/Geneva','CHF'],['Asia/Tokyo','JPY'],['America/','USD']];
-  let cur=R2C[sub];
-  if(!cur){const hit=T2C.find(([k])=>tz.startsWith(k));cur=hit?hit[1]:'EUR';}
+  // timezone first: physical location decides point-of-sale currency,
+  // the language region subtag is only a fallback
+  const hit=T2C.find(([k])=>tz.startsWith(k));
+  let cur=hit?hit[1]:R2C[sub]||'EUR';
   const RATES={EUR:1,AED:4.0,SAR:4.1,QAR:3.97,GBP:0.85,USD:1.09,CHF:0.95,JPY:163};
   const nf=new Intl.NumberFormat(lang,{style:'currency',currency:cur,maximumFractionDigits:0});
   return{lang,tz,cur,rate:RATES[cur]??1,nf};
