@@ -87,6 +87,15 @@ body.frozen .tag{display:none!important}
 footer{border-top:1px solid var(--line);padding:24px 28px 60px;color:var(--dim);font-size:12.5px}
 footer .max{max-width:880px;margin:0 auto}
 
+/* ---------- timed offer ---------- */
+#offerBar{max-width:880px;margin:0 auto;padding:0 24px;display:grid;grid-template-rows:0fr;
+  transition:grid-template-rows .5s ease}
+#offerBar.on{grid-template-rows:1fr}
+#offerBar>div{overflow:hidden}
+.obar{border:1px solid var(--gold);background:#c19a3f14;color:#8a6d29;border-radius:10px;
+  padding:9px 14px;font-size:13px;margin:6px 0 10px;font-weight:600}
+body.journey #offerBar,body.frozen #offerBar{display:none}
+
 /* ---------- purchase journey ---------- */
 body.journey .head,body.journey #list,body.journey #cmp,body.journey .about,body.journey footer{display:none}
 #journey{max-width:760px;margin:0 auto;padding:22px 24px 60px;position:relative}
@@ -202,17 +211,11 @@ body.frozen #exWall{display:grid!important}
 
 <div class="head">
   <h1>Four departures on Thursday.</h1>
-  <p>A demo booking flow that adapts as you browse. Open the log in the corner to see each change.</p>
 </div>
+<div id="offerBar"><div><div class="obar">€15 off this booking · ends in <span class="num" id="offT">5:00</span></div></div></div>
 
 <div id="list"></div>
 <div id="cmp"><div><div class="inner" id="cmpTxt"></div></div></div>
-
-<section class="about" id="about">
-  <h2>About these fares</h2>
-  <p>Light includes a cabin bag; changes cost €45. Flex adds a 23&nbsp;kg checked bag, free changes
-  until two hours before departure, and seat selection.</p>
-</section>
 
 <footer><div class="max">
   Meridian is a demo. No data leaves this page.
@@ -261,6 +264,7 @@ body.frozen #exWall{display:grid!important}
     <div class="paybox">
       <div class="payline"><span id="payFare"></span><span class="num" id="payFareAmt"></span></div>
       <div class="payline" id="payBagLine" style="display:none"><span>Checked bag 23 kg</span><span class="num">€38</span></div>
+      <div class="payline" id="payOffLine" style="display:none"><span>Offer, ends <span class="num" id="offT2"></span></span><span class="num">−€15</span></div>
       <div class="payline"><span>Taxes &amp; fees</span><span>included</span></div>
       <div class="payline" id="payPolicy" style="display:none"><span>Change policy</span><span>€45 to T-2h</span></div>
       <div class="payline total"><span>Total</span><span class="num">€<span id="tot2">0</span></span></div>
@@ -316,9 +320,9 @@ body.frozen #exWall{display:grid!important}
   </div>
   <button id="resetB">Reset</button>
   <hr>
-  <h3>Excluded by design</h3>
-  <p class="note">No countdown pressure, pre-ticked boxes, fake scarcity, or fee ambush.
-  Freeze shows the generic version for comparison.</p>
+  <h3>Persuasion rules</h3>
+  <p class="note">The €15 offer is real: one trigger, one expiry, no reset. Excluded: fake timers,
+  fabricated scarcity, pre-ticked boxes, fee ambush.</p>
   <hr>
   <p class="note">Needs a mouse or trackpad. On touch the page stays static.</p>
 </aside>
@@ -613,7 +617,7 @@ function startJourney(i){
   document.body.classList.add('journey');
   $('#journey').hidden=false;
   feed(`${name(i)} selected · journey started`);
-  buildExtras();setTotal(FARES[i].pr);goStage(1);
+  buildExtras();updateTotal();goStage(1);
   if(!lockInt){let s=600;lockInt=setInterval(()=>{s--;
     if(s<0){s=600;feed('price lock renewed');}
     const el=$('#lockT');if(el)el.textContent=`${Math.floor(s/60)}:${String(s%60).padStart(2,'0')}`;},1000);}
@@ -642,11 +646,13 @@ function buildExtras(){
   $('#exSub').textContent='';
   $('#exAdaptive').innerHTML=html;
   const ab=$('#addBag');
-  if(ab)ab.addEventListener('click',()=>{J.added=true;setTotal(FARES[J.fare].pr+38);
-    feed(`bag added · total €${FARES[J.fare].pr+38}`);goStage(2);});
+  if(ab)ab.addEventListener('click',()=>{J.added=true;updateTotal();
+    feed(`bag added · total €${calcTotal()}`);goStage(2);});
   const sb=$('#skipBag');if(sb)sb.addEventListener('click',()=>goStage(2));
 }
 
+function calcTotal(){return FARES[J.fare].pr+(J.added?38:0)-(disc.active?disc.amount:0);}
+function updateTotal(){if(J)setTotal(calcTotal());}
 function setTotal(v){
   const from=J.totalShown===undefined?v:J.totalShown;
   J.total=v;J.totalShown=v;
@@ -676,7 +682,8 @@ function armPay(){
   $('#payBagLine').style.display=J.added?'':'none';
   $('#payPolicy').style.display=(J.detailReader&&J.light)?'':'none';
   if(J.detailReader&&J.light)feed('payment · change policy row shown (fine-print history)');
-  setTotal(J.total);
+  updateTotal();
+  $('#payOffLine').style.display=disc.active?'':'none';
   clearTimeout(payIdleT);
   payIdleT=setTimeout(()=>{
     if(J&&!J.paid&&$('#st3').classList.contains('on')&&!frozen)
@@ -738,6 +745,37 @@ async function gToEl(el,ms=520){
   await glide(r.left+r.width/2,r.top+r.height/2,ms);return el;
 }
 async function gClickEl(el){el=await gToEl(el);if(!el)return;el.click();await wait(400);}
+
+/* ================= timed offer ================= */
+/* Real urgency only: fires once after 15s of activity, expires once, never resets. */
+const disc={active:false,used:false,ends:0,amount:15};
+let offInt=null;
+document.addEventListener('pointermove',()=>{
+  if(!disc.used)setTimeout(fireOffer,15000);
+  disc.used=true;
+},{once:true});
+function fireOffer(){
+  if(frozen||(J&&J.paid))return;
+  disc.active=true;disc.ends=Date.now()+300000;
+  $('#offerBar').classList.add('on');
+  if($('#st3').classList.contains('on'))$('#payOffLine').style.display='';
+  updateTotal();
+  offInt=setInterval(offTick,1000);offTick();
+  feed('active 15s · €15 offer shown · expires 5:00');
+}
+function offTick(){
+  if(J&&J.paid){clearInterval(offInt);return;}
+  const s=Math.max(0,Math.round((disc.ends-Date.now())/1000));
+  const t=`${Math.floor(s/60)}:${String(s%60).padStart(2,'0')}`;
+  $('#offT').textContent=t;const t2=$('#offT2');if(t2)t2.textContent=t;
+  if(s<=0){
+    clearInterval(offInt);disc.active=false;
+    $('#offerBar').classList.remove('on');
+    $('#payOffLine').style.display='none';
+    updateTotal();
+    feed('offer expired · price restored');
+  }
+}
 </script>
 </body>
 </html>
