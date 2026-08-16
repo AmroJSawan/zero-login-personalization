@@ -18,6 +18,8 @@ SITE = ROOT / "site"
 # Page titles are names, not category labels: they have to identify the page
 # in a gallery of many, so "Reference Architecture" becomes a proper noun phrase.
 DOCS = [
+    ("demo.html", None, "Meridian Airways", "Live Demo",
+     "A synthetic airline that learns an anonymous visitor in seconds and adapts, with the machinery on display."),
     ("signals.html", None, "Zero-Login Signal Surface", "Signal Surface",
      "Everything determinable about an anonymous visitor, computed live on your own device."),
     ("architecture.html", "ARCHITECTURE.md", "Anonymous Personalization Architecture", "Architecture",
@@ -250,6 +252,10 @@ def build():
     src = src.replace("<body>", f'<body>\n<nav style="{_navstyle()}">{nav_html("signals.html")}</nav>', 1)
     src = src.replace("</head>", f"<style>{_navcss()}</style></head>", 1)
     (SITE / "signals.html").write_text(src)
+
+    # the demo ships verbatim: it presents as its own product, so the docs nav
+    # would break the illusion. It is reachable from the index card and nav link.
+    shutil.copyfile(ROOT / "demo.html", SITE / "demo.html")
 
     for fname, mdname, title, _, lede in DOCS:
         if mdname is None:
