@@ -56,7 +56,7 @@ button{font:inherit;cursor:pointer}
 .reassure{display:grid;grid-template-rows:0fr;transition:grid-template-rows .5s ease .05s}
 .reassure>div{overflow:hidden}
 .reassure p{margin:8px 0 0;font-size:12px;color:var(--acc)}
-/* salience states — each individually near-subliminal */
+/* salience states, each individually near-subliminal */
 .fare.hi{border-color:var(--acc);background:#fff;box-shadow:0 3px 16px #0f5f4c12}
 .fare.hi .price{font-size:19px;color:var(--acc)}
 .fare.open .detail{grid-template-rows:1fr}
@@ -69,9 +69,8 @@ button{font:inherit;cursor:pointer}
   transition:grid-template-rows .5s ease}
 #cmp.on{grid-template-rows:1fr}
 #cmp>div{overflow:hidden}
-#cmp .inner{border:1.5px solid var(--gold);background:#c19a3f10;border-radius:12px;
-  padding:11px 16px;font-size:13px;margin:2px 0 10px}
-#cmp .inner b{color:#8a6d29}
+#cmp .inner{border:1px solid var(--line);background:var(--card);border-radius:10px;
+  padding:9px 14px;font-size:12.5px;color:var(--dim);margin:2px 0 10px}
 /* reveal layer */
 .tag{position:absolute;top:-9px;right:12px;font:10px var(--mono);background:#101b17;color:#5fd0a5;
   border-radius:5px;padding:2px 7px;display:none;letter-spacing:.03em}
@@ -109,7 +108,7 @@ body.journey .head,body.journey #list,body.journey #cmp,body.journey .about,body
 @keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
 .stage h2{font-size:22px;margin:0 0 4px;letter-spacing:-.01em}
 .stage p.mut{color:var(--dim);font-size:13.5px;margin:0 0 18px}
-.offer{border:1.5px solid var(--gold);background:#c19a3f0d;border-radius:14px;padding:18px;margin:12px 0}
+.offer{border:1.5px solid var(--line);background:var(--card);border-radius:14px;padding:18px;margin:12px 0}
 .offer b{display:block;margin-bottom:3px}
 .offer small{color:var(--dim);display:block}
 .orow{display:flex;gap:10px;margin-top:13px;flex-wrap:wrap}
@@ -203,7 +202,7 @@ body.frozen #exWall{display:grid!important}
 
 <div class="head">
   <h1>Four departures on Thursday.</h1>
-  <p>Nothing to type here on purpose. The page reads only your cursor — where it gravitates, what it returns to, where it hesitates — and adjusts in steps small enough to miss. Open the panel in the corner to catch it in the act.</p>
+  <p>A demo booking flow that adapts as you browse. Open the log in the corner to see each change.</p>
 </div>
 
 <div id="list"></div>
@@ -211,19 +210,12 @@ body.frozen #exWall{display:grid!important}
 
 <section class="about" id="about">
   <h2>About these fares</h2>
-  <p>Light travels cabin-bag only and changes cost €45. Flex includes a 23&nbsp;kg checked bag, free
-  changes to two hours before departure, and seat selection. Both board the same A220; the fare is a
-  contract, not a different aircraft.</p>
-  <h2>About this page</h2>
-  <p>Every adjustment you may or may not have noticed — a fare quietly opening its details, another
-  receding, the difference between two fares getting pinned — was triggered by pointer behaviour
-  alone. Freeze the adaptation in the corner panel and compare how the page feels.</p>
+  <p>Light includes a cabin bag; changes cost €45. Flex adds a 23&nbsp;kg checked bag, free changes
+  until two hours before departure, and seat selection.</p>
 </section>
 
 <footer><div class="max">
-  <b>Meridian Airways</b> — a fully synthetic proof of concept. Every flight, fare and price is fictional.
-  Nothing is transmitted anywhere: the observation, the inference and the adaptation run inside this tab
-  and evaporate when you close it.
+  Meridian is a demo. No data leaves this page.
 </div></footer>
 
 <div id="journey" hidden>
@@ -245,36 +237,36 @@ body.frozen #exWall{display:grid!important}
       <div class="hcardU"><b>Priority boarding</b><small>Board first</small><button>Add €9</button></div>
       <div class="hcardU"><b>Flexibility bundle</b><small>Free date changes</small><button>Add €24</button></div>
     </div>
-    <p class="adaptiveOnly"><button class="back" id="exMore">see everything else anyway</button></p>
+    <p class="adaptiveOnly"><button class="back" id="exMore">All extras</button></p>
     <div class="stagenav"><button class="back" id="backFares">← back to fares</button>
       <button class="next" data-next="2">Continue</button></div>
   </section>
 
   <section class="stage" id="st2">
     <h2>Who's flying</h2>
-    <p class="mut">Goes nowhere — this page has no network.
-      <button class="back" id="demoFill">use the demo traveller</button></p>
+    <p class="mut">Demo only. Nothing you enter is sent or saved.
+      <button class="back" id="demoFill">Fill demo details</button></p>
     <div class="field"><label for="fn">First name</label><input id="fn" autocomplete="off">
-      <div class="helper" id="h-fn"><div><p>Exactly as on the passport — though it's a demo, anything works.</p></div></div></div>
+      <div class="helper" id="h-fn"><div><p>As shown on the passport.</p></div></div></div>
     <div class="field"><label for="ln">Last name</label><input id="ln" autocomplete="off"></div>
     <div class="field"><label for="em">Email</label><input id="em" autocomplete="off">
-      <div class="helper" id="h-em"><div><p>Only the ticket goes here. No newsletter, no account, nothing else.</p></div></div></div>
+      <div class="helper" id="h-em"><div><p>Used once, to send your ticket.</p></div></div></div>
     <div class="stagenav"><button class="back" data-back="1">← extras</button>
       <button class="next" data-next="3">Continue</button></div>
   </section>
 
   <section class="stage" id="st3">
     <h2>Pay</h2>
-    <p class="mut">The total below is the total. Nothing was added along the way without you.</p>
+
     <div class="paybox">
       <div class="payline"><span id="payFare"></span><span class="num" id="payFareAmt"></span></div>
       <div class="payline" id="payBagLine" style="display:none"><span>Checked bag 23 kg</span><span class="num">€38</span></div>
       <div class="payline"><span>Taxes &amp; fees</span><span>included</span></div>
       <div class="payline" id="payPolicy" style="display:none"><span>Change policy</span><span>€45 to T-2h</span></div>
       <div class="payline total"><span>Total</span><span class="num">€<span id="tot2">0</span></span></div>
-      <p class="shield">Price locked for <span class="num" id="lockT">10:00</span> — it cannot rise while you decide.</p>
+      <p class="shield">Free cancellation for 24 hours.</p>
+      <p class="shield">Price locked · <span class="num" id="lockT">10:00</span></p>
       <div class="payline" style="margin-top:10px"><span>Demo card on file</span><span class="num">•••• 4242</span></div>
-      <div class="helper" id="h-pay"><div><p>Taking your time is fine. The total is final, and cancellation is free for 24 hours.</p></div></div>
       <button class="paybtn" id="payBtn">Pay €<span id="tot3">0</span></button>
     </div>
     <div class="stagenav"><button class="back" data-back="2">← traveller</button></div>
@@ -301,38 +293,34 @@ body.frozen #exWall{display:grid!important}
   </section>
 </div>
 
-<button id="pill" aria-expanded="false" aria-controls="brain"><i></i><span id="pillText">reading the room — quietly</span></button>
+<button id="pill" aria-expanded="false" aria-controls="brain"><i></i><span id="pillText">Idle</span></button>
 
 <aside id="brain" role="region" aria-label="adaptation machinery">
-  <h3>What the page noticed</h3>
-  <p class="note">Interest is accumulated per fare from cursor gravity, hovers, returns and retreats.
-  Adaptations are deliberately micrograded — use <b>reveal</b> to annotate them and <b>freeze</b> to
-  feel the page without them.</p>
+  <h3>Log</h3>
+  <p class="note">Every signal read and every change made. Data stays in-page.</p>
   <div class="tgl">
-    <button id="tglReveal">◉ reveal adaptations</button>
-    <button id="tglFreeze">❄ freeze (default page)</button>
+    <button id="tglReveal">Reveal</button>
+    <button id="tglFreeze">Freeze</button>
   </div>
   <div class="bars" id="bars"></div>
-  <ul id="feed"><li>watching, not judging</li></ul>
+  <ul id="feed"><li>No events yet</li></ul>
   <hr>
   <h3>Simulate a visitor</h3>
-  <p class="note">The ghost dispatches real pointer events through the same pipeline — it is a replay,
-  not a shortcut.</p>
+  <p class="note">Scripted visitors replayed through real pointer events.</p>
   <div class="simrow">
-    <button data-sim="comparer">⇄ the comparer</button>
-    <button data-sim="hesitator">… the hesitator</button>
-    <button data-sim="returner">↩ the returner</button>
-    <button data-sim="hunter">⌄ the hunter</button>
-    <button data-sim="journey">⟶ the full journey</button>
+    <button data-sim="comparer">Comparer</button>
+    <button data-sim="hesitator">Hesitator</button>
+    <button data-sim="returner">Returner</button>
+    <button data-sim="hunter">Hunter</button>
+    <button data-sim="journey">Full journey</button>
   </div>
-  <button id="resetB">↺ reset session</button>
+  <button id="resetB">Reset</button>
   <hr>
-  <h3>What this checkout refuses to do</h3>
-  <p class="note">No countdown pressure · no pre-ticked boxes · no "3 people are looking" · no fee
-  ambush at the end · declining is one click · the price lock protects you, not us. Freeze the
-  adaptation and the extras step becomes the usual upsell wall — that contrast is the argument.</p>
+  <h3>Excluded by design</h3>
+  <p class="note">No countdown pressure, pre-ticked boxes, fake scarcity, or fee ambush.
+  Freeze shows the generic version for comparison.</p>
   <hr>
-  <p class="note">This demo reads a mouse or trackpad; on touch it stays politely default.</p>
+  <p class="note">Needs a mouse or trackpad. On touch the page stays static.</p>
 </aside>
 
 <div id="ghost" aria-hidden="true"></div>
@@ -365,9 +353,8 @@ $('#list').innerHTML=FARES.map((f,i)=>`
     <span class="price num">€${f.pr}</span>
     <button class="sel" data-i="${i}">Select</button>
   </div>
-  <div class="detail"><div><p>${f.bag?'Checked 23 kg + cabin bag included · change or cancel free to T-2h · any seat, incl. front row · miles ×1.5':'Cabin bag 8 kg only · name change €25 · date change €45 + fare difference · random seat at check-in'}
-   · on-time 92% · CO₂ 118 kg est.</p></div></div>
-  <div class="reassure"><div><p>Price locked for 10 minutes once selected · free cancellation within 24 h of booking.</p></div></div>
+  <div class="detail"><div><p>${f.bag?'23 kg bag included · free changes to T-2h · any seat':'Cabin bag 8 kg · changes €45 · seat assigned at check-in'} · on-time 92%</p></div></div>
+  <div class="reassure"><div><p>Free cancellation for 24 hours.</p></div></div>
  </div>`).join('');
 const cards=$$('.fare');
 
@@ -375,24 +362,26 @@ const cards=$$('.fare');
 const St=FARES.map(()=>({g:0,hov:0,ret:0,flee:0,lastLeft:0,ctaMiss:0,assured:false}));
 let seq=[];            // recent meaningful hovers [{i,t,dur}]
 let feedList=[];
-const feed=(msg)=>{feedList.unshift(msg);if(feedList.length>9)feedList.pop();
+const feed=(msg)=>{
+  const ts=new Date().toTimeString().slice(0,8);
+  feedList.unshift(`${ts} · ${msg}`);if(feedList.length>9)feedList.pop();
   $('#feed').innerHTML=feedList.map(m=>`<li>${m}</li>`).join('');
   $('#pill').classList.add('live');
-  $('#pillText').textContent='the page is adapting — see how';};
+  if(!frozen)$('#pillText').textContent='Adapting · view log';};
 
 let curOver=-1,enterT=0,frozen=false;
 function onEnter(i){
   curOver=i;enterT=performance.now();
   const s=St[i];
   if(s.lastLeft&&performance.now()-s.lastLeft>2000&&s.hov>0){s.ret++;
-    if(s.ret===2)feed(`<b>${name(i)}</b>: opened details — you keep coming back to it`);}
+    if(s.ret===2)feed(`${name(i)} · 2nd return · details opened`);}
   clearTimeout(cards[i]._pw);
 }
 function onLeave(i,exitFast){
   const dur=performance.now()-enterT;curOver=-1;
   const s=St[i];s.lastLeft=performance.now();
   if(dur<420&&exitFast){s.flee++;
-    if(s.flee===2)feed(`<b>${name(i)}</b>: receding — you looked twice and left`);}
+    if(s.flee===2)feed(`${name(i)} · 2 quick exits · deprioritized`);}
   else if(dur>=420){s.hov++;seq.push({i,t:performance.now(),dur});if(seq.length>8)seq.shift();detectCompare();}
 }
 cards.forEach((c,i)=>{
@@ -406,7 +395,7 @@ $$('.sel').forEach(b=>{
   b.addEventListener('pointerleave',()=>{
     if(performance.now()-t0>350){const s=St[i];s.ctaMiss++;
       if(s.ctaMiss>=2&&!s.assured){s.assured=true;cards[i].classList.add('assure');
-        feed(`<b>${name(i)}</b>: hesitation noticed — answered it under the button`);}}});
+        feed(`${name(i)} · 2 aborted hovers on Select · policy line shown`);}}});
   b.addEventListener('click',e=>{e.preventDefault();startJourney(i);});
 });
 
@@ -435,7 +424,7 @@ function onMove(x,y,synthetic){
       const r=c.getBoundingClientRect();
       if(px>=r.left&&px<=r.right&&py>=r.top&&py<=r.bottom){
         c.classList.add('open');
-        if(!c._pwLog){c._pwLog=true;feed(`<b>${name(i)}</b>: pre-opened — your cursor was heading there`);
+        if(!c._pwLog){c._pwLog=true;feed(`${name(i)} · trajectory inbound · details preloaded`);
           setTimeout(()=>c._pwLog=false,8000);}
         c._pw=setTimeout(()=>{if(curOver!==i&&rank().top!==i)c.classList.remove('open');},1100);
       }});
@@ -456,16 +445,16 @@ function detectCompare(){
   }
 }
 function showCompare(i,j){
-  const A=FARES[i],B=FARES[j];const parts=[];
-  parts.push(`<b>€${Math.abs(A.pr-B.pr)}</b> apart`);
-  if(A.t!==B.t)parts.push(`${A.t} vs ${B.t}`);
-  if(A.bag!==B.bag)parts.push(`checked bag only on <b>${A.bag?name(i):name(j)}</b>`);
-  if(A.chg!==B.chg)parts.push(`free changes only on <b>${A.chg===0?name(i):name(j)}</b>`);
-  if(A.bag===B.bag&&A.chg===B.chg)parts.push('same conditions — the cheaper one wins');
-  $('#cmpTxt').innerHTML=`You seem to be weighing <b>${name(i)}</b> against <b>${name(j)}</b> — ${parts.join(' · ')}.`;
-  const later=cards[j];later.after($('#cmp'));
+  const A=FARES[i],B=FARES[j];
+  const cheap=A.pr<=B.pr?i:j;
+  const d=Math.abs(A.pr-B.pr);
+  const txt=(A.bag===B.bag&&A.chg===B.chg)
+    ? `Same fare conditions. The ${FARES[cheap].t} ${FARES[cheap].fam} is €${d} less.`
+    : `Flex adds a checked bag, free changes and seat choice for €${d} more.`;
+  $('#cmpTxt').textContent=txt;
+  cards[j].after($('#cmp'));
   $('#cmp').classList.add('on');
-  feed(`comparing <b>${name(i)}</b> ⇄ <b>${name(j)}</b> — pinned the difference`);
+  feed(`compared ${name(i)} / ${name(j)} · difference line shown`);
 }
 
 /* backtrack: fast down, quick return → pulse the highest-interest fare in view */
@@ -479,7 +468,7 @@ addEventListener('scroll',()=>{
     if(peak-scrollY>320&&peak-first.y>250){
       lastPulse=now;const t=rank().top;
       if(t>=0){cards[t].classList.add('pulse');setTimeout(()=>cards[t].classList.remove('pulse'),3200);
-        feed(`<b>${name(t)}</b>: soft pulse — you scrolled back looking for something`);}
+        feed(`${name(t)} · scroll return · highlighted once`);}
     }
   }
 },{passive:true});
@@ -524,16 +513,16 @@ $('#tglReveal').addEventListener('click',e=>{document.body.classList.toggle('rev
   e.target.classList.toggle('on');});
 $('#tglFreeze').addEventListener('click',e=>{frozen=document.body.classList.toggle('frozen');
   e.target.classList.toggle('on');
-  $('#pillText').textContent=frozen?'frozen — this is the page without it':'the page is adapting — see how';});
+  $('#pillText').textContent=frozen?'Frozen':'Adapting · view log';});
 $('#resetB').addEventListener('click',reset);
 function reset(){
   St.forEach(s=>Object.assign(s,{g:0,hov:0,ret:0,flee:0,lastLeft:0,ctaMiss:0,assured:false}));
   seq=[];cmpPair=null;feedList=[];
   cards.forEach(c=>{c.classList.remove('hi','lo','open','assure','pulse');c._pwLog=false;});
   $('#cmp').classList.remove('on');
-  $('#feed').innerHTML='<li>watching, not judging</li>';
+  $('#feed').innerHTML='<li>No events yet</li>';
   $('#pill').classList.remove('live');
-  $('#pillText').textContent='reading the room — quietly';renderBars();
+  $('#pillText').textContent='Idle';renderBars();
 }
 
 /* ---------------- ghost: replays REAL pointer events ---------------- */
@@ -623,42 +612,38 @@ function startJourney(i){
      decisive:totalHov<=2&&miss===0};
   document.body.classList.add('journey');
   $('#journey').hidden=false;
-  feed(`<b>${name(i)}</b> selected — carrying what it learned into the journey`);
+  feed(`${name(i)} selected · journey started`);
   buildExtras();setTotal(FARES[i].pr);goStage(1);
   if(!lockInt){let s=600;lockInt=setInterval(()=>{s--;
-    if(s<0){s=600;feed('price re-locked quietly — no countdown pressure here');}
+    if(s<0){s=600;feed('price lock renewed');}
     const el=$('#lockT');if(el)el.textContent=`${Math.floor(s/60)}:${String(s%60).padStart(2,'0')}`;},1000);}
-  $('#pillText').textContent='guiding — watch the choices it makes';
+  
 }
 
 function buildExtras(){
   const diff=Math.abs(FARES[J.sib].pr-FARES[J.fare].pr);
   let html;
   if(J.baggageGap){
-    html=`<div class="offer"><b>The bag, without the bundle</b>
-      <small>You weighed ${name(J.sib)} — most of that €${diff} jump is the checked bag. Just the bag is €38.</small>
-      <div class="orow"><button class="obtn" id="addBag">Add the bag · €38</button>
-      <button class="obtn ghost" id="skipBag">No thanks — travelling light</button></div></div>`;
-    $('#exSub').textContent='One question, not a menu — built from what you compared.';
-    feed('extras reduced to <b>one relevant offer</b> — you compared for the bag');
+    html=`<div class="offer"><b>Checked bag</b>
+      <small>23 kg checked bag, €38. Flex includes it, with free changes and seat choice, for €${diff} more.</small>
+      <div class="orow"><button class="obtn" id="addBag">Add bag €38</button>
+      <button class="obtn ghost" id="skipBag">No bag</button></div></div>`;
+    feed('extras · compare history matched · single bag offer shown');
   }else if(!J.light){
-    html=`<div class="offer"><b>Nothing to sell you</b>
-      <small>Bag, free changes and seat choice are already inside your Flex fare.</small>
+    html=`<div class="offer"><b>Included in Flex</b>
+      <small>Your fare includes a checked bag, free changes and seat selection.</small>
       <div class="orow"><button class="obtn ghost" id="skipBag">Continue</button></div></div>`;
-    $('#exSub').textContent='Flex covers it. No upsell wall.';
-    feed('extras skipped — <b>Flex already includes everything</b>');
+    feed('extras · Flex fare · nothing offered');
   }else{
-    html=`<div class="offer"><b>Travelling light, confirmed</b>
-      <small>No add-ons pushed. A 23 kg bag is €38 any time before the gate, if plans change.</small>
-      <div class="orow"><button class="obtn ghost" id="skipBag">Continue light</button></div></div>`;
-    $('#exSub').textContent='You never looked at bags, so we are not asking twice.';
-    feed('no bag interest observed — <b>upsell suppressed</b>');
+    html=`<p class="mut">Add bags or seats any time before check-in.</p>
+      <div class="orow"><button class="obtn ghost" id="skipBag">Continue</button></div>`;
+    feed('extras · no bag interest observed · upsell suppressed');
   }
-  if(J.decisive)$('#exSub').textContent+=' You moved fast, so this stays short.';
+  $('#exSub').textContent='';
   $('#exAdaptive').innerHTML=html;
   const ab=$('#addBag');
   if(ab)ab.addEventListener('click',()=>{J.added=true;setTotal(FARES[J.fare].pr+38);
-    feed(`bag added — total updated <b>in view</b>, €${FARES[J.fare].pr+38}`);goStage(2);});
+    feed(`bag added · total €${FARES[J.fare].pr+38}`);goStage(2);});
   const sb=$('#skipBag');if(sb)sb.addEventListener('click',()=>goStage(2));
 }
 
@@ -690,13 +675,12 @@ function armPay(){
   $('#payFareAmt').textContent='€'+FARES[J.fare].pr;
   $('#payBagLine').style.display=J.added?'':'none';
   $('#payPolicy').style.display=(J.detailReader&&J.light)?'':'none';
-  if(J.detailReader&&J.light)feed('you read fine print earlier — <b>change policy shown upfront</b>');
-  if(J.priceSensitive)feed('price sensitivity noted — <b>lock and total emphasised</b>, nothing added silently');
+  if(J.detailReader&&J.light)feed('payment · change policy row shown (fine-print history)');
   setTotal(J.total);
   clearTimeout(payIdleT);
   payIdleT=setTimeout(()=>{
-    if(J&&!J.paid&&$('#st3').classList.contains('on')&&!frozen){
-      $('#h-pay').classList.add('on');feed('pausing at payment — <b>reassured, not pressured</b>');}
+    if(J&&!J.paid&&$('#st3').classList.contains('on')&&!frozen)
+      feed('payment · idle 6s · no surface change');
   },RM?1800:6000);
 }
 
@@ -705,7 +689,7 @@ $('#payBtn').addEventListener('click',()=>{
   if(!$('#fn').value)$('#fn').value='Nadia';
   if(!$('#ln').value)$('#ln').value='Kovač';
   const b=$('#payBtn');b.textContent='Processing…';b.style.opacity=.7;
-  setTimeout(()=>{b.textContent='Paid';feed('<b>paid</b> — the confirmation is the reward, peak-end on purpose');
+  setTimeout(()=>{b.textContent='Paid';feed('paid · confirmation shown');
     goStage(4);},RM?200:900);
 });
 
@@ -715,7 +699,7 @@ function renderPass(){
   $('#passDep').textContent=FARES[J.fare].t;
   $('#passSeat').textContent=J.fare%2?'7A · window':'14C · aisle';
   $('#passFare').textContent=FARES[J.fare].fam+(J.added?' + bag':'');
-  $('#cfSub').textContent=`Ticket sent to ${$('#em').value||'the demo inbox'} — and this whole journey never left your tab.`;
+  $('#cfSub').textContent=`Ticket sent to ${$('#em').value||'nadia@demo.dev'}.`;
 }
 
 /* field-level behaviour: hesitation gets help, typing gets silence */
@@ -723,16 +707,16 @@ function renderPass(){
   const inp=$('#'+f);let t;
   inp.addEventListener('focus',()=>{t=setTimeout(()=>{
     if(!inp.value&&!frozen){$('#'+h).classList.add('on');
-      feed(`hesitation on <b>${f==='fn'?'the name field':'the email field'}</b> — helper shown inline`);}},2500);});
+      feed(`${f==='fn'?'name':'email'} field idle 2.5s · helper shown`);}},2500);});
   inp.addEventListener('input',()=>{clearTimeout(t);$('#'+h).classList.remove('on');});
   inp.addEventListener('blur',()=>clearTimeout(t));
 });
 $('#demoFill').addEventListener('click',()=>{
   $('#fn').value='Nadia';$('#ln').value='Kovač';$('#em').value='nadia@demo.dev';
-  feed('demo traveller filled — <b>zero typing required</b>');});
+  feed('demo details filled');});
 $('#exMore').addEventListener('click',()=>{const w=$('#exWall');
   const on=w.style.display==='grid';w.style.display=on?'none':'grid';
-  if(!on)feed('full add-on list opened <b>on request</b> — that is the difference');});
+  if(!on)feed('all extras opened on request');});
 
 $$('#journey .next').forEach(b=>b.addEventListener('click',()=>goStage(+b.dataset.next)));
 $$('#journey [data-back]').forEach(b=>b.addEventListener('click',()=>goStage(+b.dataset.back)));
@@ -743,7 +727,7 @@ $('#again').addEventListener('click',()=>{exitJourney();reset();
 function exitJourney(){
   document.body.classList.remove('journey');$('#journey').hidden=true;
   if(J)J.paid=false;
-  feed('back to fares — nothing lost, nothing punished');
+  feed('returned to fares · state kept');
 }
 
 /* generic ghost helpers for journey elements */
